@@ -71,12 +71,14 @@ header {
 
 .login-form button {
   width: 100%;
-  padding: 0.6rem;
+  padding: 0.6rem 1rem; /* Add horizontal padding */
   background: #2c3e50;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  margin-bottom: 1rem;
+  box-sizing: border-box; /* Ensures padding counts inside width */
 }
 
 .login-form button:hover {
