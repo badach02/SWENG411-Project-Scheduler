@@ -123,3 +123,26 @@ TEMPLATES[0]['DIRS'] = [BASE_DIR / "templates"]
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        # this makes your app's log messages show up
+        'home': {  # use the same name as your app or __name__
+            'handlers': ['console'],
+            'level': 'INFO',  # important: set to INFO
+            'propagate': True,
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',  # ensure root logger also prints INFO+
+    },
+}
+

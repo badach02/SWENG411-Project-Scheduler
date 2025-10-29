@@ -1,5 +1,8 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
+import logging
+
+logger = logging.getLogger(__name__)
 
 def home_view(request):
     return render(request, "home.html")
@@ -17,6 +20,8 @@ def login_validation(request):
             
             auth_check = auth_user(username, password)
 
+            logger.info("FUCK")
+
             print(auth_check)
             
             if auth_check == True:
@@ -28,6 +33,7 @@ def auth_user(username, password):
      return True
 
 def logout_user(request):
+     logger.info("FUCK2")
      return render(request, "home.html")
     
 
