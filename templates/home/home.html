@@ -1,0 +1,23 @@
+{% extends "home/base.html" %}
+{% block title %}Home | My Django Site{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-text">
+        <h2>Welcome to My Django Website</h2>
+        <p>Log in to continue to your dashboard.</p>
+    </div>
+
+    <form class="login-form" method="post">
+        {% csrf_token %}
+        <h3>Login</h3>
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Enter your username">
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="Enter your password">
+
+        <button type="submit">Login</button>
+    </form>
+</section>
+{% endblock %}
