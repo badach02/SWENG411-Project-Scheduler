@@ -31,11 +31,11 @@ header {
 }
 
 .hero {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 4rem 2rem;
-  min-height: 80vh;
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    align-items: center;    /* Center forms horizontally */
+    gap: 1rem;              /* Space between forms */
+    padding: 2rem;
 }
 
 .hero-text {
@@ -43,11 +43,14 @@ header {
 }
 
 .login-form {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  width: 300px;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* spacing between inputs/buttons inside the form */
 }
 
 .login-form h3 {

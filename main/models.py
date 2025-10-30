@@ -1,12 +1,8 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-# Create your models here.
-
-
-class account(models.Model): 
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
+class account(AbstractUser):
     account_type = models.CharField(max_length=20)
 
     def __str__(self):
-        return f"{self.username} | {self.password} | {self.account_type}"
+        return f"{self.username} | {self.account_type}"

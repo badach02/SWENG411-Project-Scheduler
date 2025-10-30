@@ -8,12 +8,14 @@
         <p>Please login or register an account.</p>
     </div>
 
+    <!-- Login Form -->
     <form class="login-form" action="{% url 'main:login' %}" method="post">
         {% csrf_token %}
         <h3>Login</h3>
         {% if error %}
             <p style="color:red;">{{ error }}</p>
         {% endif %}
+
         <label for="username">Username</label>
         <input type="text" name="username" id="username" placeholder="Enter your username" required>
 
@@ -23,9 +25,9 @@
         <button type="submit">Login</button>
     </form>
 
-    <form class="login-form" action="{% url 'main:register' %}" method="post">
-        <button type="button">Register</button></a>
+    <!-- Register Form -->
+    <form class="login-form" action="{% url 'main:register' %}" method="get">
+        <button type="submit">Register</button>
     </form>
-
 </section>
 {% endblock %}
