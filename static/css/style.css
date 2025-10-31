@@ -32,9 +32,9 @@ header {
 
 .hero {
     display: flex;
-    flex-direction: column; /* Stack children vertically */
-    align-items: center;    /* Center forms horizontally */
-    gap: 1rem;              /* Space between forms */
+    flex-direction: column; 
+    align-items: center;   
+    gap: 1rem;             
     padding: 2rem;
 }
 
@@ -50,7 +50,7 @@ header {
     width: 300px;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem; /* spacing between inputs/buttons inside the form */
+    gap: 0.5rem; 
 }
 
 .login-form h3 {
@@ -74,14 +74,14 @@ header {
 
 .login-form button {
   width: 100%;
-  padding: 0.6rem 1rem; /* Add horizontal padding */
+  padding: 0.6rem 1rem; 
   background: #2c3e50;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   margin-bottom: 1rem;
-  box-sizing: border-box; /* Ensures padding counts inside width */
+  box-sizing: border-box; 
 }
 
 .login-form button:hover {
