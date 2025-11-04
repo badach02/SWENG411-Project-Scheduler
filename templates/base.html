@@ -11,10 +11,15 @@
 <body>
     <header>
         <nav>
-            <h1 class="logo">Restaurant Schedule System</h1>
+            <div class="logo-container">
+                <img class="logo-img" src="{% static 'images/small_logo.png' %}" alt="Logo">
+                <h1 class="logo">Restaurant Schedule System</h1>
+            </div>
+
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="{% url 'main:register' %}">Register</a></li>
+                <li><a href="{% url 'main:dashboard' %}">Dashboard</a></li>
             </ul>
         </nav>
     </header>

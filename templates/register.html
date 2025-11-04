@@ -5,7 +5,6 @@
 <section class="hero">
     <div class="hero-text">
         <h2>Create an Account</h2>
-        <p>Fill out the form below to register a new account.</p>
     </div>
 
     <form class="login-form" method="post">
@@ -26,7 +25,11 @@
 
         <button type="submit">Register</button>
 
-        <p class="alt-link">Already have an account? <a href="/">Login here</a>.</p>
+        <p class="alt-link">Already have an account?</p>
+
+        <a href="/">
+            <button type="button">Login here</button>
+        </a>
     </form>
 </section>
 {% endblock %}

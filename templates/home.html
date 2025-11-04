@@ -8,7 +8,6 @@
         <p>Please login or register an account.</p>
     </div>
 
-    <!-- Login Form -->
     <form class="login-form" action="{% url 'main:login' %}" method="post">
         {% csrf_token %}
         <h3>Login</h3>
@@ -23,11 +22,10 @@
         <input type="password" name="password" id="password" placeholder="Enter your password" required>
 
         <button type="submit">Login</button>
-    </form>
 
-    <!-- Register Form -->
-    <form class="login-form" action="{% url 'main:register' %}" method="get">
-        <button type="submit">Register</button>
+        <a href="{% url 'main:register' %}">
+            <button type="button">Register an account</button>
+        </a>
     </form>
 </section>
 {% endblock %}
