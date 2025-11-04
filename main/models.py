@@ -6,3 +6,9 @@ class account(AbstractUser):
 
     def __str__(self):
         return f"{self.username} | {self.account_type}"
+    
+class shift(models.Model):
+    date = models.DateField
+    time = models.TimeField
+    role = models.CharField(max_length=30)
+
