@@ -15,6 +15,8 @@
             <p style="color:red;">{{ error }}</p>
         {% endif %}
 
+        {{ form.as_table }}
+
         <label for="username">Username</label>
         <input type="text" name="username" id="username" placeholder="Enter your username" required>
 

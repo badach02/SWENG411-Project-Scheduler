@@ -1,10 +1,27 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
+from main.forms import login_form
+from .models import shift
+from datetime import datetime
+import calendar
 
 User = get_user_model()
 
 def home_view(request):
+    if request.user.is_authenticated and request.method == 'GET':
+        return redirect('main:dashboard')
+    
     return render(request, "home.html")
+
+def schedule_view(request):
+    if request.user.is_authenticated and request.method == 'GET':
+        shifts = shift.objects.filter(cover_employee_id=request.user.id)
+        cal = calendar.HTMLCalendar(calendar.SUNDAY)
+        shift_calendar = cal.formatmonth(datetime.now().year, datetime.now().month)
+
+        return render(request, "schedule.html", {"shifts": shifts, "calendar": shift_calendar})
+    
+    return redirect("main:home")
 
 def register_view(request):
     if request.method == 'POST':
@@ -33,6 +50,8 @@ def register_view(request):
 
 def login_validation(request):
     if request.method == 'POST':
+        form = login_form(request.POST)
+
         username = request.POST.get('username')
         password = request.POST.get('password')
 
