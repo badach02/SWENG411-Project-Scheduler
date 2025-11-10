@@ -20,7 +20,7 @@ def get_calendar_context(user, year=None, month=None):
     month = month or now.month
 
     shifts = shift.objects.filter(
-        cover_employee_id=user.id,
+        employee_id=user.id,
         date__year=year,
         date__month=month
     )

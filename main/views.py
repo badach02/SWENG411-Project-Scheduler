@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from main.forms import login_form
 from .models import shift
 from .utils import shiftHTMLCalendar, get_calendar_context
 from datetime import datetime
@@ -15,6 +14,10 @@ def home_view(request):
     return render(request, "home.html")
 
 @login_required
+def dashboard_view(request):
+    return render(request, "dashboard.html")
+
+@login_required
 def schedule_view(request):
     year = request.GET.get("year")
     month = request.GET.get("month")
@@ -24,6 +27,23 @@ def schedule_view(request):
 
     context = get_calendar_context(request.user, year, month)
     return render(request, "schedule.html", context)
+
+@login_required
+def time_off_view(request):
+    return render(request, "timeoff.html")
+
+@login_required
+def swap_view(request):
+    return render(request, "swap.html")
+
+@login_required
+def settings_view(request):
+    context = {
+        "role": request.user.account_type
+    }
+    
+    return render(request, "settings.html", context)
+
 
 def register_view(request):
     if request.method == 'POST':
@@ -49,11 +69,8 @@ def register_view(request):
 
     return render(request, "register.html")
 
-
-def login_validation(request):
+def login_user(request):
     if request.method == 'POST':
-        form = login_form(request.POST)
-
         username = request.POST.get('username')
         password = request.POST.get('password')
 
@@ -66,10 +83,6 @@ def login_validation(request):
             return render(request, 'home.html', {'error': 'Invalid username or password.'})
 
     return render(request, "home.html")
-
-@login_required
-def dashboard_view(request):
-    return render(request, "dashboard.html")
 
 @login_required
 def logout_user(request):

@@ -20,8 +20,16 @@ class shift(models.Model):
     start_time = models.TimeField(default=timezone.now)
     end_time = models.TimeField(default=timezone.now)
     role = models.CharField(choices=ROLES, default="Server")
-    cover_employee_id = models.IntegerField(default=0)
+    employee_id = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Shift on {self.date} from {self.start_time} to {self.end_time} doing: {self.role}"
     
+class time_off(models.Model):
+    date = models.DateField(default=date.today)
+    start_time = models.TimeField(default=timezone.now)
+    end_time = models.TimeField(default=timezone.now)
+    employee_id = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return f"Time off request on {self.date} from {self.start_time} to {self.end_time} from user: {self.employee_id}"

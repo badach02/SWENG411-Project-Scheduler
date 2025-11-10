@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Timeoff | Schedule System{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="schedule-container">
+        <div class="schedule-card">
+            <button>Request timeoff</button>
+        </div>
+
+        <div class="calendar-card">
+            <h2>Calendar View</h2>
+
+            <div class="calendar-nav">
+                <a href="?month={{ prev_month }}&year={{ prev_year }}">
+                    <button>&#8592; Previous</button>
+                </a>
+                <a href="?month={{ next_month }}&year={{ next_year }}">
+                    <button>Next &#8594;</button>
+                </a>
+            </div>
+
+            <div class="calendar">
+                {{ calendar|safe }}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
