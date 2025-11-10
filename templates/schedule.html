@@ -28,9 +28,21 @@
             </table>
         </div>
 
-        <div class="schedule-card">
+        <div class="calendar-card">
             <h2>Calendar View</h2>
-            {{ calendar|safe }}
+
+            <div class="calendar-nav">
+                <a href="?month={{ prev_month }}&year={{ prev_year }}">
+                    <button>&#8592; Previous</button>
+                </a>
+                <a href="?month={{ next_month }}&year={{ next_year }}">
+                    <button>Next &#8594;</button>
+                </a>
+            </div>
+
+            <div class="calendar">
+                {{ calendar|safe }}
+            </div>
         </div>
     </div>
 </section>

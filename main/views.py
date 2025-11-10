@@ -3,9 +3,8 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from main.forms import login_form
 from .models import shift
-from .utils import shiftHTMLCalendar
+from .utils import shiftHTMLCalendar, get_calendar_context
 from datetime import datetime
-import calendar
 
 User = get_user_model()
 
@@ -17,17 +16,14 @@ def home_view(request):
 
 @login_required
 def schedule_view(request):
-    if request.method == 'GET':
-        shifts = shift.objects.filter(cover_employee_id=request.user.id)
-        notes = {}
+    year = request.GET.get("year")
+    month = request.GET.get("month")
 
-        for check_shift in shifts:
-            notes.update({check_shift.date.day: f"{check_shift.start_time} to {check_shift.end_time}"})
+    year = int(year) if year else None
+    month = int(month) if month else None
 
-        cal = shiftHTMLCalendar(notes=notes)
-        shift_calendar = cal.formatmonth(datetime.now().year, datetime.now().month)
-
-        return render(request, "schedule.html", {"shifts": shifts, "calendar": shift_calendar})
+    context = get_calendar_context(request.user, year, month)
+    return render(request, "schedule.html", context)
 
 def register_view(request):
     if request.method == 'POST':
