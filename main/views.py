@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from main.forms import login_form
 from .models import shift
+from .utils import shiftHTMLCalendar
 from datetime import datetime
 import calendar
 
@@ -13,15 +15,19 @@ def home_view(request):
     
     return render(request, "home.html")
 
+@login_required
 def schedule_view(request):
-    if request.user.is_authenticated and request.method == 'GET':
+    if request.method == 'GET':
         shifts = shift.objects.filter(cover_employee_id=request.user.id)
-        cal = calendar.HTMLCalendar(calendar.SUNDAY)
+        notes = {}
+
+        for check_shift in shifts:
+            notes.update({check_shift.date.day: f"{check_shift.start_time} to {check_shift.end_time}"})
+
+        cal = shiftHTMLCalendar(notes=notes)
         shift_calendar = cal.formatmonth(datetime.now().year, datetime.now().month)
 
         return render(request, "schedule.html", {"shifts": shifts, "calendar": shift_calendar})
-    
-    return redirect("main:home")
 
 def register_view(request):
     if request.method == 'POST':
@@ -65,11 +71,11 @@ def login_validation(request):
 
     return render(request, "home.html")
 
+@login_required
 def dashboard_view(request):
-    if not request.user.is_authenticated:
-        return redirect('main:home')
     return render(request, "dashboard.html")
 
+@login_required
 def logout_user(request):
     logout(request)
     return redirect('main:home')

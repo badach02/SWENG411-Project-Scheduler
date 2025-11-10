@@ -24,6 +24,59 @@ header {
   flex-direction: row;
 }
 
+.schedule-card {
+  justify-content: center;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.schedule-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.shift-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.shift-table th,
+.shift-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.shift-table th {
+  background-color: #2c3e50;
+  font-weight: 600;
+  color: #fff;
+}
+
+.shift-table tr:hover {
+  background-color: #f0f3ff;
+  transition: background-color 0.2s ease;
+}
+
+.shift-table td {
+  color: #555;
+}
+
+.shift-table td[colspan] {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
+
+
 .logo-img {
   height: 50px;
   width: auto;
@@ -171,3 +224,111 @@ footer {
   left: 0;
   width: 100%;
 }
+
+/* ========================
+   Calendar Styling (Refined)
+   ======================== */
+table.month {
+  width: 90%;
+  max-width: 1000px;
+  margin: 2rem auto;
+  border-collapse: separate;        /* prevent border merging */
+  border-spacing: 0;                /* clean joins */
+  table-layout: fixed;             /* equal column widths */
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  font-size: 0.95rem;
+}
+
+/* Month caption */
+table.month caption {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #2c3e50;
+  padding: 1rem;
+  background-color: #ecf0f1;
+  border-bottom: 2px solid #dcdde1;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+/* Weekday headers */
+table.month th {
+  background-color: #2c3e50;
+  color: #fff;
+  padding: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.85rem;
+  border: 1px solid #34495e;
+  width: 14.285%; /* ensures all columns equal width */
+}
+
+/* Day cells */
+table.month td {
+  border: 1px solid #e0e0e0;
+  height: 120px;
+  vertical-align: top;
+  padding: 8px;
+  background-color: #fdfdfd;
+  position: relative;
+  transition: background 0.2s ease;
+  box-sizing: border-box;
+}
+
+table.month td:hover {
+  background-color: #f5f9ff;
+}
+
+/* Empty days */
+table.month td.noday {
+  background-color: #f2f3f5;
+}
+
+/* Day number */
+table.month td > span.daynum {
+  display: block;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 6px;
+}
+
+/* Event / shift block */
+.event {
+  background-color: #4CAF50;
+  color: #fff;
+  border-radius: 4px;
+  padding: 3px 5px;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Highlight today's date */
+table.month td.today {
+  background-color: #e8f5e9;
+  border: 2px solid #4CAF50;
+  box-shadow: inset 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  table.month {
+    width: 100%;
+    font-size: 0.8rem;
+  }
+  table.month td {
+    height: 90px;
+    padding: 5px;
+  }
+  table.month caption {
+    font-size: 1.3rem;
+  }
+}
+

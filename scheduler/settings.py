@@ -125,6 +125,8 @@ TEMPLATES[0]['DIRS'] = [BASE_DIR / "templates"]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_URL = '/'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

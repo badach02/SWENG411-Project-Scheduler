@@ -3,11 +3,10 @@
 
 {% block content %}
 <section class="hero">
-    <div class="hero-text">
-        <h2>Shifts</h2>
-
-        <div class="shift-table">
-            <table>
+    <div class="schedule-container">
+        <div class="schedule-card">
+            <h2>Upcoming shifts</h2>
+            <table class="shift-table">
                 <tr>
                     <th>Date</th>
                     <th>Start</th>
@@ -23,14 +22,15 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td>No shifts assigned.</td>
+                    <td colspan="4">No shifts assigned.</td>
                 </tr>
-                <h1>Calendar</h1>
-                <div>
-                    {{ calendar|safe }}
-                </div>
                 {% endfor %}
             </table>
+        </div>
+
+        <div class="schedule-card">
+            <h2>Calendar View</h2>
+            {{ calendar|safe }}
         </div>
     </div>
 </section>
