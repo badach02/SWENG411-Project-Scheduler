@@ -9,7 +9,7 @@ body {
 header {
   background: #2c3e50;
   color: white;
-  padding: 1rem 2rem;
+  padding: .65rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,8 +34,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 15px;
+    gap: 5px;
 }
 
 .schedule-container {
@@ -43,17 +42,43 @@ header {
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
-  margin-top: 5px;
+  margin-top: .1rem;
 }
 
 .shift-table {
-  width: 100%;
+  width: 25rem;
   border-collapse: collapse;
   margin-top: 1em;
   background-color: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   overflow: hidden;
+}
+
+.swap-nav{
+  width: 7rem;
+  padding: 0.6rem 1rem;
+  background: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 0.3rem;
+  box-sizing: border-box;
+  margin-top: 5rem;
+}
+
+.calendar-swap-nav{
+  width: 7rem;
+  padding: 0.6rem 1rem;
+  background: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 0.1rem;
+  box-sizing: border-box;
+  margin-top: 0.1rem;
 }
 
 .shift-table th,
@@ -167,8 +192,7 @@ header {
   border-radius: 6px;
 }
 
-.login-form button,
-.calendar-card button {
+.login-form button {
   width: 100%;
   padding: 0.6rem 1rem;
   background: #2c3e50;
@@ -231,7 +255,7 @@ footer {
   background: #2c3e50;
   color: white;
   text-align: center;
-  padding: 1rem;
+  padding: 0.5rem;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -244,7 +268,7 @@ footer {
 table.month {
   width: 90%;
   max-width: 1000px;
-  margin: 2rem auto;
+  margin: .1rem auto;
   border-collapse: separate;        /* prevent border merging */
   border-spacing: 0;                /* clean joins */
   table-layout: fixed;             /* equal column widths */
@@ -283,7 +307,7 @@ table.month th {
 /* Day cells */
 table.month td {
   border: 1px solid #e0e0e0;
-  height: 120px;
+  height: 100px;
   vertical-align: top;
   padding: 8px;
   background-color: #fdfdfd;

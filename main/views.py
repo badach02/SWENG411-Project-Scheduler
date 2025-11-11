@@ -34,7 +34,17 @@ def time_off_view(request):
 
 @login_required
 def swap_view(request):
-    return render(request, "swap.html")
+    shifts = shift.objects.filter(
+        employee_id=request.user.id,
+        date__year=datetime.now().year,
+        date__month=datetime.now().month
+    )
+
+    context = {
+        "shifts": shifts
+    }
+
+    return render(request, "swap.html", context)
 
 @login_required
 def settings_view(request):
