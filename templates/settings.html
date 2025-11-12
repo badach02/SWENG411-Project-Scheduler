@@ -3,7 +3,13 @@
 
 {% block content %}
 <section class="hero">
-<p> User ID: {{user.id}}</p>
-<p> Role: {{role}}</p>
+    <p> User ID: {{user.id}}</p>
+    <p> Role: {{role}}</p>
+    <p> Edit first / last name:</p>
+    <form class="settings-form" method="post"></form>
+        <input type="text" name="firstname" id="firstname" value="{{ firstname }}" required>
+        <input type="text" name="lastname" id="lastname" value="{{ lastname }}" required>
+        <button type="submit">Submit</button>
+    </form>
 </section>
 {% endblock %}

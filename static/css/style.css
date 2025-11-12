@@ -109,6 +109,10 @@ header {
   font-style: italic;
 }
 
+.intro-card h3{
+  text-align: center;
+}
+
 
 .logo-img {
   height: 50px;

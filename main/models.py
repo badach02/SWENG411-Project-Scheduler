@@ -11,6 +11,8 @@ ROLES = {
 
 class account(AbstractUser):
     account_type = models.CharField(max_length=20)
+    first_name = models.CharField(max_length=255, default=None)
+    last_name = models.CharField(max_length=255, default=None)
 
     def __str__(self):
         return f"{self.username} | {self.account_type}"

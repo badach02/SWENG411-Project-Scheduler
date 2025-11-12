@@ -25,9 +25,9 @@
                         <td>{{ shift.end_time }}</td>
                         <td>{{ shift.role }}</td>
                         <td>
-                            <button>
-                                Edit
-                            </button>
+                            <a href="?shift={{ shift.id }}">
+                                <button> Edit </button>                        
+                            </a>
                         </td>
                     </tr>
                     {% empty %}

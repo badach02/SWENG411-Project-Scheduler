@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -15,7 +16,26 @@ def home_view(request):
 
 @login_required
 def dashboard_view(request):
+    if not request.user.first_name or not request.user.first_name:
+        return redirect("main:initialization")
+    
     return render(request, "dashboard.html")
+
+@login_required
+def initialize_view(request):
+    if request.method == 'POST':
+        new_first_name = request.POST.get("firstname")
+        new_last_name = request.POST.get("lastname")
+        user = User.objects.get(id=request.user.id)
+
+        user.first_name = new_first_name
+        user.last_name = new_last_name
+        user.save()
+
+        return redirect('main:dashboard')
+
+    return render(request, "initialization.html")
+    
 
 @login_required
 def schedule_view(request):
@@ -29,27 +49,37 @@ def schedule_view(request):
     return render(request, "schedule.html", context)
 
 @login_required
-def time_off_view(request):
-    return render(request, "timeoff.html")
+def time_off_view(request): 
+    return render(request, "timeoff.html")  
 
 @login_required
 def swap_view(request):
-    shifts = shift.objects.filter(
-        employee_id=request.user.id,
-        date__year=datetime.now().year,
-        date__month=datetime.now().month
-    )
+    if request.GET.get("shift"):
+        swapshift = shift.objects.get(
+            id=request.GET.get("shift")
+        )
 
-    context = {
-        "shifts": shifts
-    }
+        return HttpResponse(f"Hello {swapshift.start_time}")
 
-    return render(request, "swap.html", context)
+    else:
+        shifts = shift.objects.filter(
+            employee_id=request.user.id,
+            date__year=datetime.now().year,
+            date__month=datetime.now().month
+        )
+
+        context = {
+            "shifts": shifts
+        }
+
+        return render(request, "swap.html", context)
 
 @login_required
 def settings_view(request):
     context = {
-        "role": request.user.account_type
+        "role": request.user.account_type,
+        "firstname": request.user.first_name,
+        "lastname": request.user.last_name,
     }
     
     return render(request, "settings.html", context)

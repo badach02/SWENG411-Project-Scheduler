@@ -13,5 +13,6 @@ urlpatterns = [
     path('timeoff/', views.time_off_view, name='request_time_off'),
     path('swapshift/', views.swap_view, name='swap_shift'),
     path('settings/', views.settings_view, name='account_settings'),
+    path('initialization/', views.initialize_view, name='initialization')
 ]
 
