@@ -373,3 +373,139 @@ table.month td.today {
   }
 }
 
+:root {
+  --height: 360px;
+  --gap: 8px;
+  --bg: #f8fafb;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --border: #e5e7eb;
+  --highlight-bg: #fff7cc;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  padding: 20px;
+  background: var(--bg);
+  color: #111827;
+}
+
+.container {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.search {
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.search input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 15px;
+  outline: none;
+}
+
+.search .count {
+  font-size: 13px;
+  color: var(--muted);
+  min-width: 48px;
+  text-align: right;
+}
+
+.table-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+}
+
+.table-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4px 4px 10px 4px;
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.rows {
+  max-height: var(--height);
+  overflow-y: auto;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.row {
+  display: block;
+  padding: 12px 10px;
+  border-bottom: 1px dashed var(--border);
+  cursor: pointer;
+  transition: background .12s ease;
+}
+
+.row:hover {
+  background: rgba(37,99,235,0.04);
+}
+
+.row.relevant {
+  border-left: 4px solid transparent;
+}
+
+.row.high {
+  border-left-color: var(--accent);
+  background: linear-gradient(90deg, rgba(37,99,235,0.03), transparent);
+}
+
+.row .title {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.row .meta {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+mark.match {
+  background: var(--highlight-bg);
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.empty {
+  padding: 28px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: center;
+}
+
+

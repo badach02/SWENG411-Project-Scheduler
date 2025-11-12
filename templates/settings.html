@@ -6,10 +6,14 @@
     <p> User ID: {{user.id}}</p>
     <p> Role: {{role}}</p>
     <p> Edit first / last name:</p>
-    <form class="settings-form" method="post"></form>
+    <form class="settings-form" method="post">
+        {% csrf_token %}
         <input type="text" name="firstname" id="firstname" value="{{ firstname }}" required>
         <input type="text" name="lastname" id="lastname" value="{{ lastname }}" required>
         <button type="submit">Submit</button>
+        {% if check %}
+        <p>{{ check }}</p>
+        {% endif %}
     </form>
 </section>
 {% endblock %}

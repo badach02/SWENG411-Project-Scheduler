@@ -59,7 +59,11 @@ def swap_view(request):
             id=request.GET.get("shift")
         )
 
-        return HttpResponse(f"Hello {swapshift.start_time}")
+        context = {
+            "shift": swapshift
+        }
+
+        return render(request, "editshift.html", context)
 
     else:
         shifts = shift.objects.filter(
@@ -73,6 +77,11 @@ def swap_view(request):
         }
 
         return render(request, "swap.html", context)
+    
+@login_required
+def edit_shift_view(request):
+    pass
+
 
 @login_required
 def settings_view(request):
@@ -81,6 +90,23 @@ def settings_view(request):
         "firstname": request.user.first_name,
         "lastname": request.user.last_name,
     }
+
+    if request.method == 'POST':
+        new_first_name = request.POST.get("firstname")
+        new_last_name = request.POST.get("lastname")
+        user = User.objects.get(id=request.user.id)
+
+        user.first_name = new_first_name
+        user.last_name = new_last_name
+        user.save()
+
+        context["firstname"] = new_first_name
+        context["lastname"] =  new_last_name
+        context["check"] = "Success"
+        render(request, "settings.html", context)
+    else:
+        render(request, "settings.html", context)
+
     
     return render(request, "settings.html", context)
 

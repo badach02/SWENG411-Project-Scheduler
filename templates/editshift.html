@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Settings | Schedule System{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <a href="{% url 'main:swap_shift' %}">Back to shifts</a>
+        <div class="container">
+            <h1>Choose a person to swap with.</h1>
+
+            <div class="search">
+            <input id="search" type="search" placeholder="Type to search..." />
+            <div class="count" id="count">0</div>
+            </div>
+
+            <div class="table-card">
+            <div class="table-head">
+                <div>Items</div>
+                <div class="controls">
+                <button class="btn" id="reset">Reset</button>
+                <button class="btn" id="example">Fill example</button>
+                </div>
+            </div>
+
+            <div class="rows" id="rows"></div>
+            <div id="empty" class="empty" style="display:none">No items match your search.</div>
+            </div>
+        </div>
+
+        <script src="{% static 'scripts/script.js' %}"></script>
+</html>
+
+</section>
+{% endblock %}
