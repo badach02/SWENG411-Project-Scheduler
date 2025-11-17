@@ -12,7 +12,9 @@ urlpatterns = [
     path('schedule/', views.schedule_view, name='view_schedule'),
     path('timeoff/', views.time_off_view, name='request_time_off'),
     path('swapshift/', views.swap_view, name='swap_shift'),
+    path('editshift/', views.edit_shift_view, name='edit_shift'),
     path('settings/', views.settings_view, name='account_settings'),
-    path('initialization/', views.initialize_view, name='initialization')
+    path('initialization/', views.initialize_view, name='initialization'),
+    path('api/users/', views.get_users, name= "get_users")
 ]
 

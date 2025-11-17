@@ -3,26 +3,22 @@ const searchEl = document.getElementById('search');
 const countEl = document.getElementById('count');
 const emptyEl = document.getElementById('empty');
 
-let items = [
-  "Alpha Centauri",
-  "Beta Release Notes",
-  "Gamma Ray Burst Archive",
-  "Delta Project Plan",
-  "Epsilon - UX Spec",
-  "Omega Final Draft",
-  "Search Engine Optimization Guide",
-  "Relevance Ranking Paper",
-  "Quick Brown Fox",
-  "Lazy Dog Case Study",
-  "Example: User Feedback",
-  "Another Example Item",
-  "Fuzzy Matching Demo",
-  "Prefix Matches First",
-  "Contains in the Middle"
-];
+let items = []
+
+fetch("/api/users/")
+  .then(res => res.json())
+  .then(data => {
+    items = data.users
+  });
 
 let idCounter = 0;
-let originalOrder = items.map((t, i) => ({ id: ++idCounter, text: t, index: i }));
+
+let originalOrder = items.map((u, i) => ({
+  id: i,
+  text: `${u.first_name} ${u.last_name}`,
+  index: i
+}));
+
 
 function levenshtein(a, b) {
   if (a === b) return 0;
@@ -84,13 +80,11 @@ function render(query = '') {
     id: obj.id,
     text: obj.text,
     index: obj.index,
-    score: scoreItem(obj.text, q)
   }));
 
   const visible = q ? scored.filter(s => s.score >= 10) : scored;
   visible.sort((a, b) => b.score - a.score || a.index - b.index);
 
-  countEl.textContent = visible.length;
   rowsEl.innerHTML = '';
   emptyEl.style.display = visible.length ? 'none' : 'block';
 
@@ -100,7 +94,6 @@ function render(query = '') {
     row.tabIndex = 0;
     row.innerHTML = `
       <div class="title">${highlight(v.text, q)}</div>
-      <div class="meta">Relevance: ${v.score}</div>
     `;
     row.addEventListener('click', () => alert('Selected: ' + v.text));
     rowsEl.appendChild(row);
@@ -108,32 +101,5 @@ function render(query = '') {
 }
 
 searchEl.addEventListener('input', e => render(e.target.value));
-
-document.getElementById('reset').addEventListener('click', () => {
-  searchEl.value = '';
-  render('');
-  searchEl.focus();
-});
-
-document.getElementById('example').addEventListener('click', () => {
-  const extras = [
-    "Apple iPhone 15 Pro",
-    "Samsung Galaxy S25",
-    "USB-C Cable",
-    "TypeScript Guide",
-    "Python Cookbook",
-    "Fluent UI Patterns",
-    "Accessibility Checklist",
-    "Design System Tokens",
-    "User Research Notes",
-    "Component Roadmap"
-  ];
-  extras.forEach(t => {
-    if (!originalOrder.some(o => o.text === t)) {
-      originalOrder.push({ id: ++idCounter, text: t, index: originalOrder.length });
-    }
-  });
-  render(searchEl.value);
-});
 
 render('');

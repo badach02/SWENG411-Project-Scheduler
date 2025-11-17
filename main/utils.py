@@ -45,3 +45,15 @@ def get_calendar_context(user, year=None, month=None):
         "next_month": next_month,
         "next_year": next_year,
     }
+
+def trim_user_info(users):
+    trimmed_users = {}
+
+    for user in users:
+        trimmed_users[user["id"]] = {
+            "first_name": user["first_name"],
+            "last_name": user["last_name"],
+        }
+
+    return trimmed_users
+

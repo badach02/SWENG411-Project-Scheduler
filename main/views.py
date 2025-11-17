@@ -1,9 +1,9 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import shift
-from .utils import shiftHTMLCalendar, get_calendar_context
+from .utils import shiftHTMLCalendar, get_calendar_context, trim_user_info
 from datetime import datetime
 
 User = get_user_model()
@@ -154,3 +154,11 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('main:home')
+
+### API
+
+def get_users(request):
+    users = list(User.objects.values())
+    users = trim_user_info(users)
+
+    return JsonResponse({"users": users})
