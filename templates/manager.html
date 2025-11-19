@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Schedule System{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-text">
+        <h2>Welcome, {{ user.username }}!</h2>
+        <p> Access manager tools below. </p>
+    </div>
+
+    <div class="dashboard-container">
+
+        <div class="dashboard-card">
+            <h3>View My Schedule</h3>
+            <p>Check your upcoming shifts and work schedule.</p>
+            <a href="{% url 'main:view_schedule' %}" class="btn">View Schedule</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

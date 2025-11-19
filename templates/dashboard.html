@@ -28,6 +28,14 @@
             <a href="{% url 'main:swap_shift' %}" class="btn">Swap Shift</a>
         </div>
 
+        {% if user.account_type in "admin manager" %}
+            <div class="dashboard-card">
+                <h3>Manager</h3>
+                <p>Edit shifts, generate schedules, edit employee options.</p>
+                <a href="{% url 'main:manager' %}" class="btn">Scheduler</a>
+            </div>
+        {% endif %}
+
         <div class="dashboard-card">
             <h3>Options</h3>
             <p>Account settings and logout options.</p>

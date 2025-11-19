@@ -6,6 +6,11 @@ from .models import Shift
 from .utils import shiftHTMLCalendar, get_calendar_context, trim_user_info
 from datetime import datetime
 
+admin_roles = [
+    "admin",
+    "Manager",
+]
+
 User = get_user_model()
 
 def home_view(request):
@@ -19,7 +24,17 @@ def dashboard_view(request):
     if not request.user.first_name or not request.user.first_name:
         return redirect("main:initialization")
     
-    return render(request, "dashboard.html")
+    context = {
+        "role": request.user.account_type,
+    }
+
+    return render(request, "dashboard.html", context)
+
+@login_required
+def manager_view(request):
+    if not request.user.account_type in admin_roles:
+        return redirect('main:dashboard')
+    return render(request, "manager.html")
 
 @login_required
 def initialize_view(request):

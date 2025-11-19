@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
     path('register/', views.register_view, name='register'),
     path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('manager/', views.manager_view, name='manager'),
     path('schedule/', views.schedule_view, name='view_schedule'),
     path('timeoff/', views.time_off_view, name='request_time_off'),
     path('swapshift/', views.swap_view, name='swap_shift'),
