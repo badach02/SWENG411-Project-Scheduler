@@ -1,5 +1,5 @@
 import calendar
-from .models import shift
+from .models import Shift
 from datetime import datetime
 
 class shiftHTMLCalendar(calendar.HTMLCalendar):
@@ -19,7 +19,7 @@ def get_calendar_context(user, year=None, month=None):
     year = year or now.year
     month = month or now.month
 
-    shifts = shift.objects.filter(
+    shifts = Shift.objects.filter(
         employee_id=user.id,
         date__year=year,
         date__month=month

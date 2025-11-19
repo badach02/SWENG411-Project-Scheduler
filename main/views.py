@@ -2,7 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import shift
+from .models import Shift
 from .utils import shiftHTMLCalendar, get_calendar_context, trim_user_info
 from datetime import datetime
 
@@ -55,7 +55,7 @@ def time_off_view(request):
 @login_required
 def swap_view(request):
     if request.GET.get("shift"):
-        swapshift = shift.objects.get(
+        swapshift = Shift.objects.get(
             id=request.GET.get("shift")
         )
 
@@ -66,7 +66,7 @@ def swap_view(request):
         return render(request, "editshift.html", context)
 
     else:
-        shifts = shift.objects.filter(
+        shifts = Shift.objects.filter(
             employee_id=request.user.id,
             date__year=datetime.now().year,
             date__month=datetime.now().month
