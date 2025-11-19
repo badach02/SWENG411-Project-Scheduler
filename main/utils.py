@@ -25,7 +25,7 @@ def get_calendar_context(user, year=None, month=None):
         date__month=month
     )
     
-    notes = {s.date.day: f"{s.start_time} to {s.end_time}" for s in shifts}
+    notes = {s.date.day: f"{s.start_time} to {s.end_time} doing {s.role}" for s in shifts}
 
     cal = shiftHTMLCalendar(notes=notes)
     shift_calendar = cal.formatmonth(year, month)
