@@ -2,23 +2,14 @@ const rowsEl = document.getElementById('rows');
 const searchEl = document.getElementById('search');
 const countEl = document.getElementById('count');
 const emptyEl = document.getElementById('empty');
-
-let items = []
-
-fetch("/api/users/")
-  .then(res => res.json())
-  .then(data => {
-    items = data.users
-  });
-
 let idCounter = 0;
+var originalOrder = []
 
-let originalOrder = items.map((u, i) => ({
-  id: i,
-  text: `${u.first_name} ${u.last_name}`,
-  index: i
-}));
-
+async function fetchUsers() {
+  const res = await fetch("/api/users/");
+  const data = await res.json();
+  return data.users;
+}
 
 function levenshtein(a, b) {
   if (a === b) return 0;
@@ -76,11 +67,15 @@ function highlight(text, query) {
 
 function render(query = '') {
   const q = query.trim();
+  console.log(originalOrder)
   const scored = originalOrder.map(obj => ({
     id: obj.id,
     text: obj.text,
     index: obj.index,
+    score: scoreItem(obj.text, q)
   }));
+
+  console.log(scored)
 
   const visible = q ? scored.filter(s => s.score >= 10) : scored;
   visible.sort((a, b) => b.score - a.score || a.index - b.index);
@@ -102,4 +97,14 @@ function render(query = '') {
 
 searchEl.addEventListener('input', e => render(e.target.value));
 
-render('');
+(async () => {
+  var items = await fetchUsers();
+
+  originalOrder = items.map((u, i) => ({
+    id: u.id,
+    text: `${u.first_name} ${u.last_name}`,
+    index: i
+  }));
+
+  render('');
+})();

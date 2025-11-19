@@ -53,7 +53,8 @@ def trim_user_info(users):
         trimmed_users[user["id"]] = {
             "first_name": user["first_name"],
             "last_name": user["last_name"],
+            "id": user["id"],
         }
 
-    return trimmed_users
+    return list(trimmed_users.values())
 
