@@ -17,6 +17,7 @@ class Request(models.Model):
     request_date = models.DateField(default=date.today)
     start_time = models.DateTimeField(default=current_time)
     end_time = models.DateTimeField(default=current_time)
+    approved = models.BooleanField(default=False)
 
     class Meta:
         abstract = True 

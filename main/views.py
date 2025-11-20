@@ -2,6 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from .models import Shift, TimeOff
 from .utils import *
 from datetime import datetime
@@ -80,6 +81,8 @@ def time_off_view(request):
 
         start_time_post = datetime.fromisoformat(start_time_post)
         end_time_post = datetime.fromisoformat(end_time_post)
+        start_time_post = timezone.make_aware(start_time_post, timezone.get_current_timezone())
+        end_time_post = timezone.make_aware(end_time_post, timezone.get_current_timezone())
 
         timeoff_request = TimeOff(
             request_date=datetime.now().date(),
@@ -125,7 +128,6 @@ def swap_view(request):
 def edit_shift_view(request):
     pass
 
-
 @login_required
 def settings_view(request):
     context = {
@@ -152,7 +154,6 @@ def settings_view(request):
 
     
     return render(request, "settings.html", context)
-
 
 def register_view(request):
     if request.method == 'POST':
@@ -200,6 +201,7 @@ def logout_user(request):
 
 ### API
 
+@login_required
 def get_users(request):
     users = list(User.objects.values())
     users = trim_user_info(users)
