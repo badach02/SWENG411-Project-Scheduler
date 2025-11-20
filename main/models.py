@@ -2,12 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.db import models
 from datetime import date, time, datetime
-
-ROLES = [
-    ("MGR", "Manager"),
-    ("CK", "Cook"),
-    ("SVR", "Server"),
-]
+from main import request_types, ROLES
 
 def current_time():
     return datetime.now().time()
@@ -19,14 +14,17 @@ class Account(AbstractUser):
         return f"{self.username} | {self.account_type}"
     
 class Request(models.Model):
-    date = models.DateField(default=date.today)
-    start_time = models.TimeField(default=current_time)
-    end_time = models.TimeField(default=current_time)
+    request_date = models.DateField(default=date.today)
+    start_time = models.DateTimeField(default=current_time)
+    end_time = models.DateTimeField(default=current_time)
 
     class Meta:
         abstract = True 
     
-class Shift(Request, models.Model):
+class Shift(models.Model):
+    date = models.DateField(default=date.today)
+    start_time = models.TimeField(default=current_time)
+    end_time = models.TimeField(default=current_time)
     role = models.CharField(choices=ROLES, default="SVR")
     employee = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -37,8 +35,9 @@ class Shift(Request, models.Model):
     
 class TimeOff(Request, models.Model):
     employee = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
+    type = models.CharField(default="Unpaid")
     
     def __str__(self):
         emp_name = self.employee.first_name if self.employee else "No employee"
-        return f"Time off {self.date} {self.start_time}-{self.end_time} by {emp_name}"
+        return f"Time off {self.request_date} {self.start_time}-{self.end_time} by {emp_name}"
 

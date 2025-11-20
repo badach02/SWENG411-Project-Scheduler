@@ -9,11 +9,22 @@
     </div>
 
     <div class="dashboard-container">
+        <div class="dashboard-card">
+            <h3>Requests</h3>
+            <p>View and manage employee requests</p>
+            <a href="{% url 'main:view_schedule' %}" class="btn">View</a>
+        </div>
 
         <div class="dashboard-card">
-            <h3>View My Schedule</h3>
-            <p>Check your upcoming shifts and work schedule.</p>
-            <a href="{% url 'main:view_schedule' %}" class="btn">View Schedule</a>
+            <h3>Schedule Manager</h3>
+            <p>Generate, publish, and edit schedules</p>
+            <a href="{% url 'main:view_schedule' %}" class="btn">Scheduler</a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Back to dashboard</h3>
+            <p>View the main dashboard</p>
+            <a href="{% url 'main:dashboard' %}" class="btn">Dashboard</a>
         </div>
     </div>
 </section>

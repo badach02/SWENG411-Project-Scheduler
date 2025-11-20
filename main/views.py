@@ -1,17 +1,11 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Shift
-from .utils import shiftHTMLCalendar, get_calendar_context, trim_user_info
+from .models import Shift, TimeOff
+from .utils import *
 from datetime import datetime
-
-admin_roles = [
-    "admin",
-    "Manager",
-]
-
-User = get_user_model()
+from main import request_types, admin_roles
 
 def home_view(request):
     if request.user.is_authenticated and request.method == 'GET':
@@ -21,14 +15,16 @@ def home_view(request):
 
 @login_required
 def dashboard_view(request):
-    if not request.user.first_name or not request.user.first_name:
-        return redirect("main:initialization")
-    
-    context = {
-        "role": request.user.account_type,
-    }
+    if request.method == "GET":
+        if not request.user.first_name or not request.user.first_name:
+            return redirect("main:initialization")
+        
+        context = {
+            "role": request.user.account_type,
+            "admin_roles": admin_roles,
+        }
 
-    return render(request, "dashboard.html", context)
+        return render(request, "dashboard.html", context)
 
 @login_required
 def manager_view(request):
@@ -65,7 +61,39 @@ def schedule_view(request):
 
 @login_required
 def time_off_view(request): 
-    return render(request, "timeoff.html")  
+    year = request.GET.get("year")
+    month = request.GET.get("month")
+
+    year = int(year) if year else None
+    month = int(month) if month else None
+
+    context = get_calendar_context(request.user, year, month)
+    context["request_types"] = request_types
+
+    if request.method == "GET":
+        return render(request, "timeoff.html", context)  
+    
+    elif request.method == "POST":
+        start_time_post = request.POST.get("start_time")
+        end_time_post = request.POST.get("end_time")
+        type_post= request.POST.get("type")
+
+        start_time_post = datetime.fromisoformat(start_time_post)
+        end_time_post = datetime.fromisoformat(end_time_post)
+
+        timeoff_request = TimeOff(
+            request_date=datetime.now().date(),
+            start_time=start_time_post,
+            end_time=end_time_post,
+            employee=request.user,
+            type=type_post,
+        )
+
+        timeoff_request.save()
+        context["success"] = True
+
+        return render(request, "timeoff.html", context)
+
 
 @login_required
 def swap_view(request):

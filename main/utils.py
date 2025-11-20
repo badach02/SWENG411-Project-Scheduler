@@ -1,6 +1,11 @@
 import calendar
 from .models import Shift
 from datetime import datetime
+from django.contrib.auth import get_user_model
+import logging
+
+User = get_user_model()
+logger = logging.getLogger('main')
 
 class shiftHTMLCalendar(calendar.HTMLCalendar):
     def __init__(self, firstweekday=6, notes=None):

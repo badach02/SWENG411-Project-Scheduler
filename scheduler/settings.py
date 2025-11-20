@@ -135,14 +135,6 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
     },
-    'loggers': {
-        # this makes your app's log messages show up
-        'home': {  # use the same name as your app or __name__
-            'handlers': ['console'],
-            'level': 'INFO',  # important: set to INFO
-            'propagate': True,
-        },
-    },
     'root': {
         'handlers': ['console'],
         'level': 'INFO',  # ensure root logger also prints INFO+

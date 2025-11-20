@@ -28,11 +28,11 @@
             <a href="{% url 'main:swap_shift' %}" class="btn">Swap Shift</a>
         </div>
 
-        {% if user.account_type in "admin manager" %}
+        {% if user.account_type in admin_roles %}
             <div class="dashboard-card">
                 <h3>Manager</h3>
                 <p>Edit shifts, generate schedules, edit employee options.</p>
-                <a href="{% url 'main:manager' %}" class="btn">Scheduler</a>
+                <a href="{% url 'main:manager' %}" class="btn">View</a>
             </div>
         {% endif %}
 
