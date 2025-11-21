@@ -41,4 +41,3 @@ class TimeOff(Request, models.Model):
     def __str__(self):
         emp_name = self.employee.first_name if self.employee else "No employee"
         return f"Time off {self.request_date} {self.start_time}-{self.end_time} by {emp_name}"
-

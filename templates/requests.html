@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Manage Requests | Schedule System{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="schedule-container">
+        <div>
+            <h2>Pending requests</h2>
+            <form method="post">
+                {% csrf_token %}
+                <table class="shift-table">
+                    <tr>
+                        <th>Date Requested</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Status</th>
+                    </tr>
+                    {% for request in requests %}
+                    <tr>
+                        <td>{{ request.request_date }}</td>
+                        <td>{{ request.start_time }}</td>
+                        <td>{{ request.end_time }}</td>
+                        <td>
+                            <div>
+                                <label>
+                                    <input type="radio" name="decision-{{ request.id }}" value="approve" checked>
+                                    Approve
+                                </label>
+                                <label>
+                                    <input type="radio" name="decision-{{ request.id }}" value="deny">
+                                    Deny
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No requests found.</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <button type="submit">Confirm</button>
+            </form>
+            
+
+        </div>
+    </div>
+    <a href="{% url 'main:manager' %}">Back to menu</a>
+</section>
+{% endblock %}

@@ -2,7 +2,11 @@ import calendar
 from .models import Shift
 from datetime import datetime
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 import logging
+from functools import wraps
+from main import admin_roles
 
 User = get_user_model()
 logger = logging.getLogger('main')
@@ -63,3 +67,14 @@ def trim_user_info(users):
 
     return list(trimmed_users.values())
 
+def manager_required(view_func):
+    @wraps(view_func)
+    @login_required
+    def wrapper(request, *args, **kwargs):
+        user = request.user
+
+        if getattr(user, "account_type", None) in admin_roles:
+            return view_func(request, *args, **kwargs)
+        return redirect("main:home")
+    
+    return wrapper
