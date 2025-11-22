@@ -7,6 +7,7 @@
 
         <div class="schedule-card">
             <div class="make-request">
+                <h2> Enter time off request </h2>
                 <form method="post">
                     {% csrf_token %}
                     <label for="start_time">Start time</label>
@@ -27,19 +28,19 @@
             </div>
             <div>
                 <h2>Pending requests</h2>
-                <table class="shift-table">
+                <table class="request-table">
                     <tr>
                         <th>Date Requested</th>
                         <th>Start</th>
                         <th>End</th>
-                        <th>Approved</th>
+                        <th>Type</th>
                     </tr>
                     {% for request in requests %}
                     <tr>
                         <td>{{ request.request_date }}</td>
                         <td>{{ request.start_time }}</td>
                         <td>{{ request.end_time }}</td>
-                        <td>{{ request.approved }}</td>
+                        <td>{{ request.type }}</td>
                     </tr>
                     {% empty %}
                     <tr>
@@ -54,10 +55,10 @@
 
             <div class="calendar-nav">
                 <a href="?month={{ prev_month }}&year={{ prev_year }}">
-                    <button>&#8592; Previous</button>
+                    <button class="calendar-swap-nav">&#8592; Previous</button>
                 </a>
                 <a href="?month={{ next_month }}&year={{ next_year }}">
-                    <button>Next &#8594;</button>
+                    <button class="calendar-swap-nav">Next &#8594;</button>
                 </a>
             </div>
 

@@ -13,11 +13,20 @@ class Account(AbstractUser):
     def __str__(self):
         return f"{self.username} | {self.account_type}"
     
+class Notification(models.Model):
+    date = models.CharField(default=current_time)
+    notif_text = models.CharField(max_length=255)
+    employee = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Notification for {self.employee.username} sent on {self.date}"
+    
 class Request(models.Model):
     request_date = models.DateField(default=date.today)
     start_time = models.DateTimeField(default=current_time)
     end_time = models.DateTimeField(default=current_time)
     approved = models.BooleanField(default=False)
+    pending = models.BooleanField(default=True)
 
     class Meta:
         abstract = True 

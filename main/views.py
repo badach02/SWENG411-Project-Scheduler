@@ -59,6 +59,7 @@ def schedule_view(request):
     month = int(month) if month else None
 
     context = get_calendar_context(request.user, year, month)
+    context = context | generate_7day_schedule(request.user)
     return render(request, "schedule.html", context)
 
 @login_required
@@ -71,7 +72,7 @@ def time_off_view(request):
 
         requests = TimeOff.objects.filter(
             employee=request.user,
-            approved=False,
+            pending=True,
         )
 
         context = get_calendar_context(request.user, year, month)
@@ -83,14 +84,9 @@ def time_off_view(request):
         return render(request, "timeoff.html", context)  
     
     elif request.method == "POST":
-        start_time_post = request.POST.get("start_time")
-        end_time_post = request.POST.get("end_time")
+        start_time_post = parse_iso_string(request.POST.get("start_time"))
+        end_time_post = parse_iso_string(request.POST.get("end_time"))
         type_post= request.POST.get("type")
-
-        start_time_post = datetime.fromisoformat(start_time_post)
-        end_time_post = datetime.fromisoformat(end_time_post)
-        start_time_post = timezone.make_aware(start_time_post, timezone.get_current_timezone())
-        end_time_post = timezone.make_aware(end_time_post, timezone.get_current_timezone())
 
         timeoff_request = TimeOff(
             request_date=datetime.now().date(),
@@ -170,7 +166,7 @@ def scheduler_view(request):
 def manage_requests_view(request):
     if request.method == "GET":
         requests = TimeOff.objects.filter(
-            approved=False,
+            pending=True,
         )
 
         context = {
@@ -178,6 +174,41 @@ def manage_requests_view(request):
         }
 
         return render(request, "requests.html", context)
+    
+    if request.method == "POST":
+        results = {
+            key: value[0]  # QueryDict values are lists
+            for key, value in request.POST.items()
+            if key.startswith("decision-")
+        }
+
+        for key, value in results.items():
+            request_id = int(key.split("-")[1])
+            
+            if value == "a":
+                logger.info("APPROVE")
+                timeoff_request = TimeOff.objects.get(
+                    id=request_id
+                )
+
+                timeoff_request.approved = True
+                timeoff_request.pending = False
+                notif = make_notification(f"Your request for time off ({timeoff_request.type}) from {timeoff_request.start_time} to {timeoff_request.end_time} was approved.", request.user)
+                notif.save()
+                timeoff_request.save()
+
+            else:
+                timeoff_request = TimeOff.objects.get(
+                    id=request_id
+                )
+
+                timeoff_request.approved = False
+                timeoff_request.pending = False
+                notif = make_notification(f"Your request for time off ({timeoff_request.type}) from {timeoff_request.start_time} to {timeoff_request.end_time} was denied.", request.user)
+                notif.save()
+                timeoff_request.save()
+
+        return redirect("main:requests_manager")
 
 @manager_required
 def manager_view(request):

@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import Account, Shift, TimeOff
+from .models import Account, Shift, TimeOff, Notification
 
 # Register your models here.    
 
 admin.site.register(Account)
 admin.site.register(Shift)
 admin.site.register(TimeOff)
+admin.site.register(Notification)
