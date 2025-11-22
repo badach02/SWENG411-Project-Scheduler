@@ -27,7 +27,7 @@ class shiftHTMLCalendar(calendar.HTMLCalendar):
     
 def make_notification(text, user):
     notif = Notification(
-        date = datetime.now().time(),
+        date = datetime.now(),
         notif_text = text,
         employee = user,
     )

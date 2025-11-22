@@ -14,7 +14,7 @@ class Account(AbstractUser):
         return f"{self.username} | {self.account_type}"
     
 class Notification(models.Model):
-    date = models.CharField(default=current_time)
+    date = models.DateTimeField(default=current_time)
     notif_text = models.CharField(max_length=255)
     employee = models.ForeignKey(Account, on_delete=models.CASCADE)
 

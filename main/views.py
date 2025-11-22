@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.timezone import now
-from .models import Shift, TimeOff
+from .models import Shift, TimeOff, Notification
 from .utils import *
 from datetime import datetime, date
 from main import request_types, admin_roles
@@ -21,9 +21,14 @@ def dashboard_view(request):
         if not request.user.first_name or not request.user.last_name:
             return redirect("main:initialization")
         
+        notifs = Notification.objects.filter(
+            employee=request.user
+        )
+        
         context = {
             "role": request.user.account_type,
             "admin_roles": admin_roles,
+            "notifications": notifs
         }
 
         return render(request, "dashboard.html", context)

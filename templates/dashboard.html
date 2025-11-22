@@ -49,5 +49,22 @@
             </form>
         </div>
     </div>
+
+    <table class="notif-table">
+        <tr>
+            <th colspan="2">Notifications</th>
+        </tr>
+        {% for notif in notifications %}
+        <tr>
+            <td>{{ notif.date }}</td>
+            <td>{{ notif.notif_text }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">No notifications found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
 </section>
 {% endblock %}
