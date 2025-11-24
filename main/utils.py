@@ -1,5 +1,5 @@
 import calendar
-from .models import Shift, Notification
+from .models import Shift, Notification, TimeOff
 from datetime import datetime
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -57,6 +57,33 @@ def generate_7day_schedule(user, day=None):
 
     return context
 
+def manage_requests(requests, user):
+    for key, value in requests.items():
+        request_id = int(key.split("-")[1])
+        
+        if value == "a":
+            logger.info("APPROVE")
+            timeoff_request = TimeOff.objects.get(
+                id=request_id
+            )
+
+            timeoff_request.approved = True
+            timeoff_request.pending = False
+            notif = make_notification(f"Your request for time off ({timeoff_request.type}) from {timeoff_request.start_time.strftime("%Y-%m-%d %H:%M")} to {timeoff_request.end_time.strftime("%Y-%m-%d %H:%M")} was approved.", user)
+            notif.save()
+            timeoff_request.save()
+
+        else:
+            timeoff_request = TimeOff.objects.get(
+                id=request_id
+            )
+
+            timeoff_request.approved = False
+            timeoff_request.pending = False
+            notif = make_notification(f"Your request for time off ({timeoff_request.type}) from {timeoff_request.start_time.strftime("%Y-%m-%d %H:%M")} to {timeoff_request.end_time.strftime("%Y-%m-%d %H:%M")} was denied.", user)
+            notif.save()
+            timeoff_request.save()
+
 def get_calendar_context(user, year=None, month=None):
     now = datetime.now()
     year = year or now.year
@@ -67,13 +94,12 @@ def get_calendar_context(user, year=None, month=None):
         date__year=year,
         date__month=month
     )
-    
-    notes = {
-        s.date.day: f"{s.start_time.strftime('%H:%M')} to "
-                    f"{s.end_time.strftime('%H:%M')} doing {s.role}"
-        for s in shifts
-    }
 
+    notes = {}
+    for s in shifts:
+        start = s.start_time.strftime('%H:%M')
+        end = s.end_time.strftime('%H:%M')
+        notes[s.date.day] = f"{start} to {end}\n{s.role}"
 
     cal = shiftHTMLCalendar(notes=notes)
     shift_calendar = cal.formatmonth(year, month)

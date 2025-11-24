@@ -46,7 +46,7 @@ class Shift(models.Model):
 class TimeOff(Request, models.Model):
     employee = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
     type = models.CharField(default="Unpaid")
-    
+
     def __str__(self):
         emp_name = self.employee.first_name if self.employee else "No employee"
         return f"Time off {self.request_date} {self.start_time}-{self.end_time} by {emp_name}"

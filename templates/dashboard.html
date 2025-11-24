@@ -50,21 +50,27 @@
         </div>
     </div>
 
+
     <table class="notif-table">
-        <tr>
-            <th colspan="2">Notifications</th>
-        </tr>
-        {% for notif in notifications %}
-        <tr>
-            <td>{{ notif.date }}</td>
-            <td>{{ notif.notif_text }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="2">No notifications found.</td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th colspan="2">Notifications</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for notif in notifications %}
+            <tr>
+                <td class="notif-date">{{ notif.date|date:"M d, Y H:i" }}</td>
+                <td class="notif-text">{{ notif.notif_text }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2" class="no-notif">No notifications found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
+
 
 </section>
 {% endblock %}

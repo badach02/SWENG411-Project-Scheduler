@@ -181,37 +181,13 @@ def manage_requests_view(request):
         return render(request, "requests.html", context)
     
     if request.method == "POST":
-        results = {
-            key: value[0]  # QueryDict values are lists
+        requests = {
+            key: value[0]
             for key, value in request.POST.items()
             if key.startswith("decision-")
         }
 
-        for key, value in results.items():
-            request_id = int(key.split("-")[1])
-            
-            if value == "a":
-                logger.info("APPROVE")
-                timeoff_request = TimeOff.objects.get(
-                    id=request_id
-                )
-
-                timeoff_request.approved = True
-                timeoff_request.pending = False
-                notif = make_notification(f"Your request for time off ({timeoff_request.type}) from {timeoff_request.start_time} to {timeoff_request.end_time} was approved.", request.user)
-                notif.save()
-                timeoff_request.save()
-
-            else:
-                timeoff_request = TimeOff.objects.get(
-                    id=request_id
-                )
-
-                timeoff_request.approved = False
-                timeoff_request.pending = False
-                notif = make_notification(f"Your request for time off ({timeoff_request.type}) from {timeoff_request.start_time} to {timeoff_request.end_time} was denied.", request.user)
-                notif.save()
-                timeoff_request.save()
+        manage_requests(requests, request.user)
 
         return redirect("main:requests_manager")
 

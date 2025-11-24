@@ -3,16 +3,26 @@
 
 {% block content %}
 <section class="hero">
-    <p> User ID: {{user.id}}</p>
-    <p> Role: {{role}}</p>
-    <p> Edit first / last name:</p>
+        <h2>User Settings</h2>
+        <p>User ID: <strong>{{ user.id }}</strong></p>
+        <p>Role: <strong>{{ role }}</strong></p>
+
     <form class="settings-form" method="post">
         {% csrf_token %}
-        <input type="text" name="firstname" id="firstname" value="{{ firstname }}" required>
-        <input type="text" name="lastname" id="lastname" value="{{ lastname }}" required>
+        <fieldset>
+            <legend>Edit Name</legend>
+
+            <label for="firstname">First Name</label>
+            <input type="text" name="firstname" id="firstname" value="{{ firstname }}" required>
+
+            <label for="lastname">Last Name</label>
+            <input type="text" name="lastname" id="lastname" value="{{ lastname }}" required>
+        </fieldset>
+
         <button type="submit">Submit</button>
+
         {% if check %}
-        <p>{{ check }}</p>
+        <p class="form-message">{{ check }}</p>
         {% endif %}
     </form>
 </section>
