@@ -21,6 +21,27 @@ class Notification(models.Model):
     def __str__(self):
         return f"Notification for {self.employee.username} sent on {self.date}"
     
+class Availability(models.Model):
+    WEEKDAYS = [
+        (0, "Monday"),
+        (1, "Tuesday"),
+        (2, "Wednesday"),
+        (3, "Thursday"),
+        (4, "Friday"),
+        (5, "Saturday"),
+        (6, "Sunday"),
+    ]
+
+    employee = models.ForeignKey(Account, on_delete=models.CASCADE)
+    day = models.IntegerField(choices=WEEKDAYS)
+    start = models.TimeField(default=time(7, 0))
+    end = models.TimeField(default=time(22, 0))
+
+    def __str__(self):
+        day_name = dict(self.WEEKDAYS).get(self.day, "Unknown")
+        return f"Availability for {self.employee.username} on {day_name}: {self.start} - {self.end}"
+
+    
 class Request(models.Model):
     request_date = models.DateField(default=date.today)
     start_time = models.DateTimeField(default=current_time)

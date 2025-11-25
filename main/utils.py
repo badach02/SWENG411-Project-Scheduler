@@ -95,11 +95,24 @@ def get_calendar_context(user, year=None, month=None):
         date__month=month
     )
 
+    time_offs = TimeOff.objects.filter(
+        employee_id=user.id, 
+        start_time__year=year,
+        start_time__month=month
+    )   
+
     notes = {}
     for s in shifts:
         start = s.start_time.strftime('%H:%M')
         end = s.end_time.strftime('%H:%M')
         notes[s.date.day] = f"{start} to {end}\n{s.role}"
+
+    for t in time_offs:
+        num_days = (t.end_time.date() - t.start_time.date()).days
+
+        for i in range(num_days + 1):
+            current_day = t.start_time.date() + timedelta(days=i)
+            notes[current_day.day] = f"Time Off {t.type}"
 
     cal = shiftHTMLCalendar(notes=notes)
     shift_calendar = cal.formatmonth(year, month)
