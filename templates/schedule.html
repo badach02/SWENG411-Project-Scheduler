@@ -81,7 +81,8 @@
                 </tr>
             </table>
 
-            <form>
+            <form method="post" class="availability-form">
+                {% csrf_token %}
                 <table class="availability-table">
                     <tr>
                         <th>Availability</th>
