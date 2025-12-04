@@ -5,12 +5,12 @@
 <section class="hero">
     <div class="hero-text">
         <h2>Welcome!</h2>
-        <p>Please login or register an account.</p>
     </div>
 
     <form class="login-form" action="{% url 'main:login' %}" method="post">
         {% csrf_token %}
-        <h3>Login</h3>
+        <h3>Log In</h3>
+        <p>Please Sign In to your account</p>
         {% if error %}
             <p style="color:red;">{{ error }}</p>
         {% endif %}

@@ -476,3 +476,66 @@ table.month td.today {
     font-size: 1.3rem;
   }
 }
+
+/* dashboard today's shifts table*/
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    max-width: 800px;
+    height: 100%;
+    max-height: 400px;
+    margin-top: 20px;
+    left: 0;
+}
+
+.card h3 {
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* ===== Table (Headers + Rows) ===== */
+.shifts-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.shifts-table thead th {
+    text-align: left;
+    padding: 10px 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.shifts-table tbody td {
+    padding: 12px 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+/* Hover effect on rows */
+.shifts-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+/* ===== Shift Badge (blue for now) ===== */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.badge-morning {
+    background: #0ea5e9; /* Morning blue */
+}
