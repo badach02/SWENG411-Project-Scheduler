@@ -1,5 +1,5 @@
 body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
   margin: 0;
   background-color: #f5f6fa;
   color: #333;
@@ -194,14 +194,16 @@ header {
 
 .btn {
   display: inline-block;
-  padding: 8px 14px;
+  padding: 10px 14px;
   background: #4CAF50;
   color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   text-decoration: none;
-  font-size: 0.9em;
+  font-size: 1.1em;
+  
+
 }
 
 .login-form {
@@ -477,29 +479,50 @@ table.month td.today {
   }
 }
 
-/* dashboard today's shifts table*/
+
+/* Today's Shifts and Quick Actions Left and Right*/
+/* === Layout row for shifts + quick actions === */
+.dashboard-row {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    margin-top: 24px;
+}
+
+/* Make cards more like the mockup */
 .card {
     background: #ffffff;
     border-radius: 12px;
-    padding: 24px 28px;
+    padding: 20px 24px;
     border: 1px solid #e5e7eb;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
     width: 100%;
-    max-width: 800px;
-    height: 100%;
-    max-height: 400px;
+    height: auto;
     margin-top: 20px;
-    left: 0;
 }
 
+/* Left card wider, right card narrower */
+.shifts-card {
+    width: 1000px;
+    height: 500px;
+    flex: 3;
+}
+
+.quick-card {
+    flex: 2;
+    width: 400px;
+    height: 500px;
+}
+
+/* Card title */
 .card h3 {
     margin-bottom: 16px;
-    font-size: 1.1rem;
+    font-size: 10px;
     font-weight: 600;
     color: #111827;
 }
 
-/* ===== Table (Headers + Rows) ===== */
+/* ===== Today's Shifts table – cleaner like design ===== */
 .shifts-table {
     width: 100%;
     border-collapse: collapse;
@@ -508,34 +531,98 @@ table.month td.today {
 .shifts-table thead th {
     text-align: left;
     padding: 10px 0;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
     color: #6b7280;
     border-bottom: 1px solid #e5e7eb;
 }
 
 .shifts-table tbody td {
-    padding: 12px 0;
+    padding: 14px 0;
     border-bottom: 1px solid #f3f4f6;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: #374151;
 }
 
-/* Hover effect on rows */
+/* Last row without bottom border (clean edge) */
+.shifts-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Subtle row hover */
 .shifts-table tbody tr:hover {
     background: #f9fafb;
 }
 
-/* ===== Shift Badge (blue for now) ===== */
+/* Shift badges */
 .badge {
     display: inline-block;
     padding: 4px 10px;
-    border-radius: 12px;
+    border-radius: 999px;
     font-size: 0.75rem;
     font-weight: 600;
     color: #ffffff;
 }
 
 .badge-morning {
-    background: #0ea5e9; /* Morning blue */
+    background: #0ea5e9;
+}
+
+/* ===== Quick Actions styling ===== */
+.actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.actions-list .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Base quick action button (like white outline buttons) */
+.quick-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    color: #111827;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+/* Hover effect */
+.quick-btn:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+/* Dark primary button at top */
+.quick-btn.primary {
+    background: #111827;
+    color: #ffffff;
+    border-color: #111827;
+}
+
+.quick-btn.primary:hover {
+    background: #0f172a;
+    border-color: #0f172a;
+}
+
+.dashboard-row h6 {
+    font-size: 30px;
+    text-align: left;
+    margin-top: 10px;
+}
+
+.shifts-table thead th {
+    font-size: 20px;
 }

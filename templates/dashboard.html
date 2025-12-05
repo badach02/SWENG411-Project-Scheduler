@@ -57,29 +57,49 @@
     </div>
 
 
-    <div class="card shifts-card">
-    <h3>Today's Shifts</h3>
+    <div class="dashboard-row">
+        <div class="card shifts-card">
+            <h6>Today's Shifts</h6>
 
-    <table class="shifts-table">
-        <thead>
-            <tr>
-                <th>Employee</th>
-                <th>Role</th>
-                <th>Time</th>
-                <th>Shift</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>—</td>
-                <td>—</td>
-                <td>—</td>
-                <td><span class="badge badge-morning">Morning</span></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+            <table class="shifts-table">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Role</th>
+                        <th>Time</th>
+                        <th>Shift</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>—</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <td><span class="badge badge-morning">Morning</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
+
+        <div class="card quick-card">
+            <h6>Quick Actions</h6>
+            <div class="actions-list">
+                <a href="{% url 'main:view_schedule' %}" class="btn">
+                    <i data-feather="file-text"></i>
+                    View Schedule
+                </a>
+                <a href="{% url 'main:request_time_off' %}" class="btn">
+                    <i data-feather="plus"></i>
+                    Request Time Off
+                </a>
+                <a href="{% url 'main:swap_shift' %}" class="btn">
+                    <i data-feather="refresh-ccw"></i>
+                    Swap Shift
+                </a>
+            </div>
+        </div>
+    </div>
 
 
     <table class="notif-table">
