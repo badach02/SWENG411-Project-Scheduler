@@ -219,7 +219,10 @@ def register_view(request):
 
         if password1 != password2:
             return render(request, "register.html", {"error": "Passwords do not match."})
-
+        git
+        push
+        origin
+        bella
         if User.objects.filter(username=username).exists():
             return render(request, "register.html", {"error": "Username already taken."})
 
