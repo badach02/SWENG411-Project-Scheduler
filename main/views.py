@@ -91,6 +91,10 @@ def time_off_view(request):
     elif request.method == "POST":
         start_time_post = parse_iso_string(request.POST.get("start_time"))
         end_time_post = parse_iso_string(request.POST.get("end_time"))
+
+        if start_time_post == False or end_time_post == False:
+            return redirect("/timeoff?success=0")
+        
         type_post= request.POST.get("type")
 
         timeoff_request = TimeOff(
@@ -186,7 +190,7 @@ def manage_requests_view(request):
             for key, value in request.POST.items()
             if key.startswith("decision-")
         }
-
+        
         manage_requests(requests, request.user)
 
         return redirect("main:requests_manager")
