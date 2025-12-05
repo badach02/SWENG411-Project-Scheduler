@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Schedule System{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-text">
+        <h2>Welcome, {{ user.username }}!</h2>
+        <p> Access manager tools below. </p>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="dashboard-card">
+            <h3>Requests</h3>
+            <p>View and manage employee requests</p>
+            <a href="{% url 'main:requests_manager' %}" class="btn">View</a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Schedule Manager</h3>
+            <p>Generate, publish, and edit schedules</p>
+            <a href="{% url 'main:scheduler' %}" class="btn">Scheduler</a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Back to dashboard</h3>
+            <p>View the main dashboard</p>
+            <a href="{% url 'main:dashboard' %}" class="btn">Dashboard</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
