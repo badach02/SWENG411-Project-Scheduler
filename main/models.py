@@ -9,9 +9,24 @@ def current_time():
 
 class Account(AbstractUser):
     account_type = models.CharField(max_length=20)
+    validate = models.BooleanField(default=False)
+    def save(self, *args, **kwargs):
+        # Automatically validate superusers
+        if self.is_superuser:
+            self.validate = True
+
+        super().save(*args, **kwargs)
+    def __str__(self):
+        return f"{self.username} | {self.account_type} | Validated: {self.validate}"
+
+class RegistrationRequest(models.Model):
+    employee = models.ForeignKey(Account, on_delete=models.CASCADE)
+    request_date = models.DateField(default=date.today)
+    pending = models.BooleanField(default=True)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.username} | {self.account_type}"
+        return f"Registration request for {self.employee.username}"
     
 class Notification(models.Model):
     date = models.DateTimeField(default=current_time)
