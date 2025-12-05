@@ -88,6 +88,9 @@ def time_off_view(request):
 
         if request.GET.get("success") == "1":
             context["success"] = True
+        elif request.GET.get("success") == "0":
+            context["success"] = False
+        
         return render(request, "timeoff.html", context)  
     
     elif request.method == "POST":

@@ -185,6 +185,7 @@ def get_availability_context(user):
         availability = None
 
     context = {}
+    
     if availability:
         week = availability.week
         for day_num, times in week.items():
@@ -195,5 +196,4 @@ def get_availability_context(user):
             day_name = calendar.day_name[i]
             context[day_name.lower()] = {"start": "07:00", "end": "22:00"}
 
-    logger.info(f"Availability context: {context}")
     return context

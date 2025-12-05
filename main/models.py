@@ -26,7 +26,7 @@ class Availability(models.Model):
     week = models.JSONField(default=default_week)
 
     def __str__(self):
-        return f"Weekly availability for {self.employee.username}"
+        return f"Availability for {self.employee.username}"
 
 
     
