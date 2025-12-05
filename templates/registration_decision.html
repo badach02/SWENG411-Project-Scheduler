@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Approve Registration{% endblock %}
+
+{% block content %}
+<h2>Approve Registration: {{ user.username }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <p>Select all roles this employee is trained for:</p>
+
+    {% for role in admin_roles %}
+        <label>
+            <input type="checkbox" name="roles" value="{{ role }}">
+            {{ role }}
+        </label><br>
+    {% endfor %}
+
+    <input type="hidden" name="decision" value="approve">
+
+    <button type="submit">Confirm Approval</button>
+</form>
+
+<form method="post" style="margin-top: 1rem;">
+    {% csrf_token %}
+    <input type="hidden" name="decision" value="deny">
+    <button type="submit" class="btn btn-danger">Deny Registration</button>
+</form>
+
+<a href="{% url 'main:requests_manager' %}">Back</a>
+{% endblock %}
