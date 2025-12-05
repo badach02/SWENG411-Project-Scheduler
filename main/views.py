@@ -65,6 +65,8 @@ def schedule_view(request):
 
     context = get_calendar_context(request.user, year, month)
     context = context | generate_7day_schedule(request.user)
+    context = context | get_availability_context(request.user)
+    
     return render(request, "schedule.html", context)
 
 @login_required

@@ -1,5 +1,5 @@
 import calendar
-from .models import Shift, Notification, TimeOff
+from .models import Availability, Shift, Notification, TimeOff
 from datetime import datetime
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -162,10 +162,9 @@ def parse_iso_string(iso_string):
     except:
         return False
     
-    
+
 
     return fixed_string
-
 
 def manager_required(view_func):
     @wraps(view_func)
@@ -178,3 +177,23 @@ def manager_required(view_func):
         return redirect("main:home")
     
     return wrapper
+
+def get_availability_context(user):
+    try:
+        availability = Availability.objects.get(employee=user)
+    except Availability.DoesNotExist:
+        availability = None
+
+    context = {}
+    if availability:
+        week = availability.week
+        for day_num, times in week.items():
+            day_name = calendar.day_name[int(day_num)]
+            context[day_name.lower()] = times
+    else:
+        for i in range(7):
+            day_name = calendar.day_name[i]
+            context[day_name.lower()] = {"start": "07:00", "end": "22:00"}
+
+    logger.info(f"Availability context: {context}")
+    return context
