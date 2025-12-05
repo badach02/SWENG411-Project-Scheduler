@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Pending Registration Approval | Schedule System{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h2>Welcome, {{ user.username }}!</h2>
+    <h3>Manager has yet to approve your registration request.</h3>
+    <p> Please try again later. </p>
+    <a href="{% url 'main:login' %}">Back to login</a>
+</section>
+{% endblock %}

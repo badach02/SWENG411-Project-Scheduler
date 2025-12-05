@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Register | Schedule System{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-text">
+        <h2>Create an account</h2>
+    </div>
+
+    <form class="login-form" method="post">
+        {% csrf_token %}
+        <h3>Register</h3>
+
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" placeholder="Choose a username" required>
+
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="Enter your email" required>
+
+        <label for="password1">Password</label>
+        <input type="password" name="password1" id="password1" placeholder="Enter your password" required>
+
+        <label for="password2">Confirm Password</label>
+        <input type="password" name="password2" id="password2" placeholder="Confirm your password" required>
+
+        <button type="submit">Register</button>
+
+        <p class="alt-link">Already have an account?</p>
+
+        <a href="/">
+            <button type="button">Login here</button>
+        </a>
+    </form>
+</section>
+{% endblock %}
