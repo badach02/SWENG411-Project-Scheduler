@@ -7,6 +7,9 @@ from main import request_types, ROLES
 def current_time():
     return datetime.now().time()
 
+def current_datetime():
+    return datetime.now()
+
 class Account(AbstractUser):
     account_type = models.CharField(max_length=20)
     validate = models.BooleanField(default=False)

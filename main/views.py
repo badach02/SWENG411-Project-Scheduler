@@ -233,43 +233,45 @@ def manager_view(request):
     return render(request, "manager.html")
 
 
+from django.shortcuts import render, redirect
+from .models import RegistrationRequest, Account, Notification
+
 @manager_required
 def registration_decision_view(request, request_id):
-    reg_request = RegistrationRequest.objects.get(id=request_id)
-    user = reg_request.employee
+    request_obj = RegistrationRequest.objects.get(id=request_id)
+    roles = ['Host', 'Cook', 'Server']
 
     if request.method == "POST":
         decision = request.POST.get("decision")
+        selected_roles = request.POST.getlist("roles")  # get multiple selected roles
 
-        if decision == "deny":
-            # Delete the user completely
-            user.delete()
-            reg_request.delete()
-            return redirect("main:requests_manager")
+        user = request_obj.employee
 
-        # Approve: assign trained roles
-        roles = request.POST.getlist("roles")
-        user.account_type = ",".join(roles)  # store selected roles
-        user.validate = True
-        user.save()
+        if decision == "approve":
+            if selected_roles:
+                # Save multiple roles as comma-separated string
+                user.account_type = ", ".join(selected_roles)
+            user.validate = True
+            user.save()
 
-        # Notify employee of approval
-        Notification.objects.create(
-            employee=user,
-            notif_text="Your registration has been approved."
-        )
+            # Update request status
+            request_obj.approved = True
+            request_obj.pending = False
+            request_obj.save()
 
-        reg_request.pending = False
-        reg_request.approved = True
-        reg_request.save()
+        elif decision == "deny":
+            request_obj.approved = False
+            request_obj.pending = False
+            request_obj.save()
 
-        return redirect("main:requests_manager")
+        # Redirect back to manager requests page
+        return redirect('main:requests_manager')
 
+    # GET request: render the role selection form
     return render(request, "registration_decision.html", {
-        "user": user,
-        "admin_roles": admin_roles  # List of all possible roles for selection
+        "request_obj": request_obj,
+        "roles": roles
     })
-
 
 def login_user(request):
     if request.method == 'POST':

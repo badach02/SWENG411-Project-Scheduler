@@ -1,31 +1,45 @@
 {% extends "base.html" %}
-{% block title %}Approve Registration{% endblock %}
+{% block title %}Approve Registration | Schedule System{% endblock %}
 
 {% block content %}
-<h2>Approve Registration: {{ user.username }}</h2>
+<section class="hero">
+    <div class="schedule-container">
+        <h2>Approve Registration for {{ user.username }}</h2>
 
-<form method="post">
-    {% csrf_token %}
+        <form method="post">
+            {% csrf_token %}
 
-    <p>Select all roles this employee is trained for:</p>
+            <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
+                <!-- Approve / Deny Inline -->
+                <div>
+                    <label>
+                        <input type="radio" name="decision" value="approve" checked>
+                        Approve
+                    </label>
+                    <label>
+                        <input type="radio" name="decision" value="deny">
+                        Deny
+                    </label>
+                </div>
 
-    {% for role in admin_roles %}
-        <label>
-            <input type="checkbox" name="roles" value="{{ role }}">
-            {{ role }}
-        </label><br>
-    {% endfor %}
+                <!-- Roles selection (only if approving) -->
+                <div>
+                    <span>Trained Roles:</span>
+                    {% for role in roles %}
+                        <label>
+                            <input type="checkbox" name="roles" value="{{ role }}">
+                            {{ role }}
+                        </label>
+                    {% endfor %}
+                </div>
 
-    <input type="hidden" name="decision" value="approve">
+                <div>
+                    <button type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
-    <button type="submit">Confirm Approval</button>
-</form>
-
-<form method="post" style="margin-top: 1rem;">
-    {% csrf_token %}
-    <input type="hidden" name="decision" value="deny">
-    <button type="submit" class="btn btn-danger">Deny Registration</button>
-</form>
-
-<a href="{% url 'main:requests_manager' %}">Back</a>
+    <a href="{% url 'main:requests_manager' %}" style="display:block; margin-top:2rem;">Back to requests</a>
+</section>
 {% endblock %}

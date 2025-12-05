@@ -5,49 +5,48 @@
 <section class="hero">
     <div class="schedule-container">
 
-        <!-- Registration Requests Form -->
+        <!-- Registration Requests Table -->
         <div>
             <h2>Pending Registration Requests</h2>
-                <table class="request-table">
-                    <tr>
-                        <th>Username</th>
-                        <th>Date Requested</th>
-                        <th>Actions</th>
-                    </tr>
-                    {% for request in registration_requests %}
-                    <tr>
-                        <td>{{ request.employee.username }}</td>
-                        <td>{{ request.request_date }}</td>
-                        <td>
-                            <!-- APPROVE takes you to role-selection page -->
-                            <a href="{% url 'main:registration_decision' request.id %}" class="btn">Approve</a>
 
-                            <!-- DENY happens instantly -->
-                            <form method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <input type="hidden" name="registration_submit" value="1">
-                                <input type="hidden" name="decision-{{ request.id }}" value="deny">
-                                <button type="submit" class="btn btn-danger">Deny</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="3">No registration requests found.</td>
-                    </tr>
-                    {% endfor %}
-                </table>
+            <table class="request-table">
+                <tr>
+                    <th>Username</th>
+                    <th>Date Requested</th>
+                    <th>Actions</th>
+                </tr>
 
-                <button type="submit">Confirm Registration Decisions</button>
-            </form>
+                {% for request in registration_requests %}
+                <tr>
+                    <td>{{ request.employee.username }}</td>
+                    <td>{{ request.request_date }}</td>
+                    <td style="white-space: nowrap;">
+
+                        <!-- APPROVE → go to registration_decision_view -->
+                        <a href="{% url 'main:registration_decision' request.id %}">Approve</a>
+
+                        <!-- DENY → inline -->
+                        <form method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="registration_submit" value="1">
+                            <input type="hidden" name="decision-{{ request.id }}" value="deny">
+                            <button type="submit">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No registration requests found.</td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
 
-        <!-- Time-off Requests Form -->
+        <!-- Time-off Requests Table -->
         <div style="margin-top: 2rem;">
             <h2>Pending Time-off Requests</h2>
             <form method="post">
                 {% csrf_token %}
-                <!-- Hidden input tells the view this is the time-off form -->
                 <input type="hidden" name="timeoff_submit" value="1">
 
                 <table class="request-table">
