@@ -1,45 +1,41 @@
 {% extends "base.html" %}
+
 {% block title %}Approve Registration | Schedule System{% endblock %}
 
 {% block content %}
-<section class="hero">
-    <div class="schedule-container">
-        <h2>Approve Registration for {{ user.username }}</h2>
+<section>
+    <h2>Approve Registration for {{ user.username }}</h2>
 
-        <form method="post">
-            {% csrf_token %}
+    <form method="post">
+        {% csrf_token %}
 
-            <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
-                <!-- Approve / Deny Inline -->
-                <div>
-                    <label>
-                        <input type="radio" name="decision" value="approve" checked>
-                        Approve
-                    </label>
-                    <label>
-                        <input type="radio" name="decision" value="deny">
-                        Deny
-                    </label>
-                </div>
+        <!-- Decision options -->
+        <fieldset>
+            <legend>Decision</legend>
+            <label>
+                <input type="radio" name="decision" value="approve" checked>
+                Approve
+            </label>
+            <label>
+                <input type="radio" name="decision" value="deny">
+                Deny
+            </label>
+        </fieldset>
 
-                <!-- Roles selection (only if approving) -->
-                <div>
-                    <span>Trained Roles:</span>
-                    {% for role in roles %}
-                        <label>
-                            <input type="checkbox" name="roles" value="{{ role }}">
-                            {{ role }}
-                        </label>
-                    {% endfor %}
-                </div>
+        <!-- Roles selection -->
+        <fieldset>
+            <legend>Trained Roles</legend>
+            {% for role in roles %}
+                <label>
+                    <input type="checkbox" name="roles" value="{{ role }}">
+                    {{ role }}
+                </label><br>
+            {% endfor %}
+        </fieldset>
 
-                <div>
-                    <button type="submit">Submit</button>
-                </div>
-            </div>
-        </form>
-    </div>
+        <button type="submit">Submit</button>
+    </form>
 
-    <a href="{% url 'main:requests_manager' %}" style="display:block; margin-top:2rem;">Back to requests</a>
+    <p><a href="{% url 'main:requests_manager' %}">Back to requests</a></p>
 </section>
 {% endblock %}
