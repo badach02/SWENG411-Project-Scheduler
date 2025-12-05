@@ -161,6 +161,8 @@ def parse_iso_string(iso_string):
         fixed_string = timezone.make_aware(fixed_string, timezone.get_current_timezone())
     except:
         return False
+    
+    
 
     return fixed_string
 
