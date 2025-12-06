@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.utils.timezone import now
 from .models import Shift, TimeOff, Notification
 from .utils import *
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from main import request_types, admin_roles
 
 def home_view(request):
@@ -203,6 +203,57 @@ def manage_requests_view(request):
 @manager_required
 def manager_view(request):
     return render(request, "manager.html")
+
+@manager_required
+def select_week_ending_view(request):
+    week_dates = get_week_endings()
+    users = request.POST.get("users")
+
+    if request.method == "GET":
+        return render(request, "select_week_ending.html", {"week_dates": week_dates}, {"users": users})
+
+    week_ending = request.POST.get("week_ending")
+    custom = request.POST.get("custom_date")
+
+    chosen = week_ending or custom
+
+    if not chosen:
+        return render(request, "select_week_ending.html", {
+            "week_dates": week_dates,
+            "error": "No week selected."
+        }, {"users": users})
+
+    try:
+        chosen_date = datetime.date.fromisoformat(chosen)
+    except:
+        return render(request, "select_week_ending.html", {
+            "week_dates": week_dates,
+            "error": "Invalid date selected."
+        }, {"users": users})
+
+    return render(request, "shifts_to_cover.html", {
+        "selected_week": chosen_date.isoformat()
+    }, {"users": users})
+
+@manager_required
+def user_selection_view(request):
+    if request.method == "GET":
+        users = User.objects.all()
+        return render(request, "makeschedule.html", {"users": users})
+
+    elif request.method == "POST":
+        selected_users = [
+            int(key.split("-")[1])
+            for key in request.POST
+            if key.startswith("user-")
+        ]
+
+        week_dates = get_week_endings()
+
+        return render(request, "shifts_to_cover.html", {
+            "users": get_users_by_post_ids(selected_users),
+            "week_dates": week_dates
+        })
 
 def login_user(request):
     if request.method == 'POST':

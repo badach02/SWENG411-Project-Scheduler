@@ -1,11 +1,10 @@
 import calendar
+import datetime
 from .models import Availability, Shift, Notification, TimeOff
-from datetime import datetime
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.utils import timezone
-from datetime import date, timedelta
 import logging
 from functools import wraps
 from main import admin_roles
@@ -36,19 +35,19 @@ def make_notification(text, user):
 
 def generate_7day_schedule(user, day=None):
     if not day:
-        day = date.today()
+        day = datetime.date.today()
 
     shifts = Shift.objects.filter(
         employee=user,
-        date__gte=datetime.now().date()
+        date__gte=datetime.datetime.now().date()
     )
 
-    one_week_from_day = day + timedelta(days=7)
+    one_week_from_day = day + datetime.timedelta(days=7)
     shifts = [s for s in shifts if day <= s.date <= one_week_from_day]
 
     context = {}
     for i in range(7):
-        current_day = day + timedelta(days=i)
+        current_day = day + datetime.timedelta(days=i)
         day_shifts = [s for s in shifts if s.date == current_day]
         context[f"day{i+1}"] = {
             "date": current_day,
@@ -84,8 +83,21 @@ def manage_requests(requests, user):
             notif.save()
             timeoff_request.save()
 
+def get_week_endings():
+    today = timezone.localdate()
+    days_until_saturday = (5 - today.weekday()) % 7
+    first_saturday = today + datetime.timedelta(days=days_until_saturday)
+
+    return [
+        (first_saturday + datetime.timedelta(weeks=i)).isoformat()
+        for i in range(12)
+    ]
+
+def get_users_by_post_ids(id_list):
+    return User.objects.filter(id__in=id_list)
+
 def get_calendar_context(user, year=None, month=None):
-    now = datetime.now()
+    now = datetime.datetime.now()
     year = year or now.year
     month = month or now.month
 
@@ -111,7 +123,7 @@ def get_calendar_context(user, year=None, month=None):
         num_days = (t.end_time.date() - t.start_time.date()).days
 
         for i in range(num_days + 1):
-            current_day = t.start_time.date() + timedelta(days=i)
+            current_day = t.start_time.date() + datetime.timedelta(days=i)
             notes[current_day.day] = f"Time Off {t.type}"
 
     cal = shiftHTMLCalendar(notes=notes)
@@ -122,8 +134,8 @@ def get_calendar_context(user, year=None, month=None):
     next_month = month + 1 if month < 12 else 1
     next_year = year + 1 if month == 12 else year
 
-    today = date.today()
-    one_week_from_now = today + timedelta(days=7)
+    today = datetime.date.today()
+    one_week_from_now = today + datetime.timedelta(days=7)
 
     shifts = [
         s for s in shifts

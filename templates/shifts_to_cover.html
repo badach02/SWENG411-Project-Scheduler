@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Scheduler | Schedule System{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <p> Scheduler </p>
+    <p> Create shifts you want to cover </p>
+        <form method="post">
+            {% csrf_token %}
+            <table class="user-table">
+                <tr>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Number of people to cover</th>
+                </tr>
+            </table>
+            <button id="add" type="button">Add Shift</button>
+            <button id="remove" type="button">Remove Shift</button>
+            <button type="submit">Confirm</button>
+        </form>
+
+        <script src="{% static 'scripts/shifts_to_cover.js' %}"></script>
+</section>
+{% endblock %}

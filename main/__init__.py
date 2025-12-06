@@ -6,6 +6,7 @@ admin_roles = [
 request_types = [
     "Unpaid",
     "Vacation",
+    "Swap",
 ]
 
 ROLES = [

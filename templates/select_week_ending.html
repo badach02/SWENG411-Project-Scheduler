@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Scheduler | Schedule System{% endblock %}
+
+{% block content %}
+    <section class="hero">
+    <h2>Select Week Ending (Saturday)</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div>
+            {% for date in week_dates %}
+            <label style="display:block; margin-bottom:6px;">
+                <input type="radio" name="week_ending" value="{{ date }}" {% if forloop.first %}checked{% endif %}>
+                {{ date }}
+            </label>
+            {% endfor %}
+        </div>
+        <button type="submit">Confirm</button>
+    </form>
+
+    {% if selected_week %}
+    <div style="margin-top:15px; background:#eef; padding:10px;">
+        Selected week ending: {{ selected_week }}
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div style="margin-top:15px; background:#fee; padding:10px; color:#900;">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <script src="{% static 'scripts/select_week_ending.js' %}"></script>
+</section>
+{% endblock %}
