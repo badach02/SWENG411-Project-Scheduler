@@ -8,6 +8,8 @@ from .models import Shift, TimeOff, Notification
 from .utils import *
 from datetime import datetime, date
 from main import request_types, admin_roles
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 def home_view(request):
     if request.user.is_authenticated and request.method == 'GET':
@@ -25,10 +27,13 @@ def dashboard_view(request):
             employee=request.user
         )
         
+        total_employees = User.objects.filter(account_type="Employee").count()
+
         context = {
             "role": request.user.account_type,
             "admin_roles": admin_roles,
-            "notifications": notifs
+            "notifications": notifs,
+            "total_employees": total_employees,
         }
 
         return render(request, "dashboard.html", context)

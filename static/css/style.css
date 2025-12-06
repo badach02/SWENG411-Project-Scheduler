@@ -141,7 +141,6 @@ header {
   align-items: center;
   gap: 1rem;
   padding: 2rem;
-  text-align: left;
 }
 
 .hero p {
@@ -482,7 +481,6 @@ table.month td.today {
     display: flex;
     gap: 30px;
     align-items: flex-start;
-    margin-top: 24px;
 }
 
 /* Make cards more like the mockup */
@@ -574,7 +572,8 @@ table.month td.today {
 .actions-list .btn {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    background-color: #334155;
 }
 
 /* Base quick action button (like white outline buttons) */
