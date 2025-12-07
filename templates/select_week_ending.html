@@ -17,6 +17,12 @@
             </label>
             {% endfor %}
         </div>
+        <!-- include selected users as hidden inputs when provided -->
+        {% if users %}
+            {% for u in users %}
+                <input type="hidden" name="user_ids" value="{{ u.id }}">
+            {% endfor %}
+        {% endif %}
         <button type="submit">Confirm</button>
     </form>
 

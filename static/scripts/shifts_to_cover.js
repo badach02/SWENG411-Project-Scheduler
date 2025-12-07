@@ -13,14 +13,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const cell1 = row.insertCell(0);
         const startInput = document.createElement("input");
         startInput.type = "time";
-        startInput.name = `start_time_${index}`;
+        startInput.name = `shift-${index}-start`;
         cell1.appendChild(startInput);
 
         // End Time
         const cell2 = row.insertCell(1);
         const endInput = document.createElement("input");
         endInput.type = "time";
-        endInput.name = `end_time_${index}`;
+        endInput.name = `shift-${index}-end`;
         cell2.appendChild(endInput);
 
         // Number of People
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
         numInput.type = "number";
         numInput.min = "1";
         numInput.value = "1";
-        numInput.name = `num_people_${index}`;
+        numInput.name = `shift-${index}-count`;
         cell3.appendChild(numInput);
     }
 

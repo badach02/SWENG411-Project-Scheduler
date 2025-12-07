@@ -24,6 +24,7 @@ urlpatterns = [
 
     # manager/scheduler/
     path('manager/scheduler/maker', views.user_selection_view, name='schedule_maker'),
+    path('manager/scheduler/make', views.make_schedule_view, name='make_schedule'),
     path('manager/scheduler/edit', views.scheduler_view, name='schedule_manager'),
-    path('manager/scheduler/weekchooser', views.scheduler_view, name='select_week_ending_view'),
+    path('manager/scheduler/weekchooser', views.select_week_ending_view, name='select_week_ending_view'),
 ]
