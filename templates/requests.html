@@ -4,8 +4,47 @@
 {% block content %}
 <section class="hero">
     <div class="schedule-container">
+
+        <!-- Registration Requests Table -->
         <div>
-            <h2>Pending requests</h2>
+            <h2>Pending Registration Requests</h2>
+
+            <table class="request-table">
+                <tr>
+                    <th>Username</th>
+                    <th>Date Requested</th>
+                    <th>Actions</th>
+                </tr>
+
+                {% for request in registration_requests %}
+                <tr>
+                    <td>{{ request.employee.username }}</td>
+                    <td>{{ request.request_date }}</td>
+                    <td style="white-space: nowrap;">
+
+                        <!-- APPROVE → go to registration_decision_view -->
+                        <a href="{% url 'main:registration_decision' request.id %}">Approve</a>
+
+                        <!-- DENY → inline -->
+                        <form method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="registration_submit" value="1">
+                            <input type="hidden" name="decision-{{ request.id }}" value="deny">
+                            <button type="submit">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No registration requests found.</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- Time-off Requests Table -->
+        <div style="margin-top: 2rem;">
+            <h2>Pending Time-off Requests</h2>
             <form method="post">
                     {% csrf_token %}
                     <table class="request-table">
@@ -44,8 +83,49 @@
 
                     <button type="submit">Confirm</button>
                 </form>
+                {% csrf_token %}
+                <input type="hidden" name="timeoff_submit" value="1">
+
+                <table class="request-table">
+                    <tr>
+                        <th>Employee</th>
+                        <th>Date Requested</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                    </tr>
+                    {% for request in timeoff_requests %}
+                    <tr>
+                        <td>{{ request.employee.first_name }} {{ request.employee.last_name }}</td>
+                        <td>{{ request.request_date }}</td>
+                        <td>{{ request.start_time }}</td>
+                        <td>{{ request.end_time }}</td>
+                        <td>{{ request.type }}</td>
+                        <td>
+                            <label>
+                                <input type="radio" name="decision-{{ request.id }}" value="approve" checked>
+                                Approve
+                            </label>
+                            <label>
+                                <input type="radio" name="decision-{{ request.id }}" value="deny">
+                                Deny
+                            </label>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">No time-off requests found.</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <button type="submit">Confirm Time-off Decisions</button>
+            </form>
         </div>
+
     </div>
+
     <a href="{% url 'main:manager' %}">Back to menu</a>
 </section>
 {% endblock %}

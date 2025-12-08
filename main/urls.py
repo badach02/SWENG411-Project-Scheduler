@@ -16,7 +16,7 @@ urlpatterns = [
     path('settings/', views.settings_view, name='account_settings'),
     path('initialization/', views.initialize_view, name='initialization'),
     path('api/users/', views.get_users, name= "get_users"),
-    
+
     # manager/
     path('manager/', views.manager_view, name='manager'),
     path('manager/requests', views.manage_requests_view, name='requests_manager'),
@@ -27,4 +27,5 @@ urlpatterns = [
     path('manager/scheduler/make', views.make_schedule_view, name='make_schedule'),
     path('manager/scheduler/edit', views.scheduler_view, name='schedule_manager'),
     path('manager/scheduler/weekchooser', views.select_week_ending_view, name='select_week_ending_view'),
+    path('manager/requests/<int:request_id>/', views.registration_decision_view, name='registration_decision'),
 ]
