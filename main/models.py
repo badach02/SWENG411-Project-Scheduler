@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.db import models
 from datetime import date, time, datetime
-from main import request_types, ROLES
+from main import request_types, ROLES, default_week
 
 def current_time():
     return datetime.now().time()
@@ -22,24 +22,12 @@ class Notification(models.Model):
         return f"Notification for {self.employee.username} sent on {self.date}"
     
 class Availability(models.Model):
-    WEEKDAYS = [
-        (0, "Monday"),
-        (1, "Tuesday"),
-        (2, "Wednesday"),
-        (3, "Thursday"),
-        (4, "Friday"),
-        (5, "Saturday"),
-        (6, "Sunday"),
-    ]
-
-    employee = models.ForeignKey(Account, on_delete=models.CASCADE)
-    day = models.IntegerField(choices=WEEKDAYS)
-    start = models.TimeField(default=time(7, 0))
-    end = models.TimeField(default=time(22, 0))
+    employee = models.OneToOneField(Account, on_delete=models.CASCADE)
+    week = models.JSONField(default=default_week)
 
     def __str__(self):
-        day_name = dict(self.WEEKDAYS).get(self.day, "Unknown")
-        return f"Availability for {self.employee.username} on {day_name}: {self.start} - {self.end}"
+        return f"Availability for {self.employee.username}"
+
 
     
 class Request(models.Model):

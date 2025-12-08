@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Scheduler | Schedule System{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <p> Scheduler </p>
+    <p> Create shifts you want to cover </p>
+        <form method="post" action="{% url 'main:make_schedule' %}">
+            {% csrf_token %}
+            <table class="user-table">
+                <tr>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Number of people to cover</th>
+                </tr>
+            </table>
+            <button id="add" type="button">Add Shift</button>
+            <button id="remove" type="button">Remove Shift</button>
+            <!-- include selected users as hidden inputs -->
+            {% for u in users %}
+                <input type="hidden" name="user_ids" value="{{ u.id }}">
+            {% endfor %}
+            <!-- week ending (ISO date) -->
+            <input type="hidden" name="week_ending" value="{{ selected_week }}">
+
+            <button type="submit" name="preview" value="1">Preview Schedule</button>
+            <button type="submit" name="save" value="1">Save (create shifts immediately)</button>
+        </form>
+
+        <script src="{% static 'scripts/shifts_to_cover.js' %}"></script>
+</section>
+{% endblock %}

@@ -20,9 +20,10 @@
                         {% endfor %}
                     </select>
                     <button type="submit">Request timeoff</button>
-
-                    {% if success %}
+                    {% if success == 1 %}
                         <p> Successfully entered time off </p>
+                    {% elif success == 0 %}
+                        <p> Failed to enter time off. </p>
                     {% endif %}
                 </form>
             </div>

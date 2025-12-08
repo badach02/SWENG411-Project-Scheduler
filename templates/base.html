@@ -18,8 +18,36 @@
             </div>
 
             <ul class="nav-links">
-                <li><a href="/">Dashboard</a></li>
-                <li><a href="{% url 'main:register' %}">Register</a></li>
+                <li>
+                    <a href="{% url 'main:dashboard' %}" class="nav-link nav-link-active">
+                        <i data-feather="calendar"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'main:view_schedule' %}" class="nav-link">
+                        <i data-feather="calendar"></i>
+                        <span>Schedule</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link">
+                        <i data-feather="user"></i>
+                        <span>Employees</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link">
+                        <i data-feather="bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'main:register' %}" class="nav-link">
+                        <i data-feather="calendar"></i>
+                        <span>Register</span>
+                    </a>
+                </li>
             </ul>
         </nav>
     </header>

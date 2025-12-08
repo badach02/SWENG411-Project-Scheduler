@@ -4,6 +4,11 @@
 {% block content %}
 <section class="hero">
     <p> Scheduler </p>
-    <a href="{% url 'main:manager' %}">Back to menu</a>
+    <a href="{% url 'main:schedule_manager' %}">
+        <button>Manage schedules</button>
+    </a>
+    <a href="{% url 'main:schedule_maker' %}">
+        <button>Make schedules</button>
+    </a>
 </section>
 {% endblock %}

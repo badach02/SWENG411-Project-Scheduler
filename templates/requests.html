@@ -7,43 +7,43 @@
         <div>
             <h2>Pending requests</h2>
             <form method="post">
-                {% csrf_token %}
-                <table class="request-table">
-                    <tr>
-                        <th>Request By</th>
-                        <th>Date Requested</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                    </tr>
-                    {% for request in requests %}
-                    <tr>
-                        <td>{{ request.employee.first_name }} {{ request.employee.last_name }}</td>
-                        <td>{{ request.request_date }}</td>
-                        <td>{{ request.start_time }}</td>
-                        <td>{{ request.end_time }}</td>
-                        <td>{{ request.type }}</td>
-                        <td>
-                            <label>
-                                <input type="radio" name="decision-{{ request.id }}" value="approve" checked>
-                                Approve
-                            </label>
-                            <label>
-                                <input type="radio" name="decision-{{ request.id }}" value="deny">
-                                Deny
-                            </label>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="4">No requests found.</td>
-                    </tr>
-                    {% endfor %}
-                </table>
+                    {% csrf_token %}
+                    <table class="request-table">
+                        <tr>
+                            <th>Request By</th>
+                            <th>Date Requested</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                        </tr>
+                        {% for request in requests %}
+                        <tr>
+                            <td>{{ request.employee.first_name }} {{ request.employee.last_name }}</td>
+                            <td>{{ request.request_date }}</td>
+                            <td>{{ request.start_time }}</td>
+                            <td>{{ request.end_time }}</td>
+                            <td>{{ request.type }}</td>
+                            <td>
+                                <label>
+                                    <input type="radio" name="decision-{{ request.id }}" value="approve" checked>
+                                    Approve
+                                </label>
+                                <label>
+                                    <input type="radio" name="decision-{{ request.id }}" value="deny">
+                                    Deny
+                                </label>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">No requests found.</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
 
-                <button type="submit">Confirm</button>
-            </form>
+                    <button type="submit">Confirm</button>
+                </form>
         </div>
     </div>
     <a href="{% url 'main:manager' %}">Back to menu</a>

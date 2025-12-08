@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Schedule Preview | Schedule System{% endblock %}
+
+{% block content %}
+<style>
+    .preview-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        margin: 20px 0;
+    }
+    .preview-table thead tr {
+        background: #4CAF50;
+        color: white;
+    }
+    .preview-table th {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+    .preview-table td {
+        padding: 12px;
+        border: 1px solid #ddd;
+    }
+    .preview-table tbody tr {
+        border: 1px solid #ddd;
+    }
+    .preview-table tbody tr.assigned {
+        background: #f9f9f9;
+    }
+    .preview-table tbody tr.unassigned {
+        background: #ffe6e6;
+    }
+    .assigned-name {
+        color: #2E7D32;
+        font-weight: bold;
+    }
+    .unassigned {
+        color: #d32f2f;
+        font-weight: bold;
+    }
+</style>
+
+<section class="hero">
+    <h2>Schedule Preview</h2>
+
+    <div style="margin-bottom: 20px; padding: 15px; background: #f0f8ff; border-radius: 5px;">
+        <p><strong>Week:</strong> {{ week_start }} to {{ week_ending }}</p>
+    </div>
+
+    <div style="overflow-x: auto; margin-bottom: 20px;">
+        <table class="preview-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Day</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Assigned</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in plan %}
+                <tr class="{% if entry.employee %}assigned{% else %}unassigned{% endif %}">
+                    <td>{{ entry.date|date:"Y-m-d" }}</td>
+                    <td>{{ entry.date|date:"l" }}</td>
+                    <td>{{ entry.start }}</td>
+                    <td>{{ entry.end }}</td>
+                    <td>
+                        {% if entry.employee %}
+                            <span class="assigned-name">{{ entry.employee.first_name }} {{ entry.employee.last_name }}</span>
+                        {% else %}
+                            <span class="unassigned">UNASSIGNED</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top:15px;">
+        <form method="post" action="{% url 'main:make_schedule' %}" style="display:inline-block; margin-right:10px;">
+            {% csrf_token %}
+            <input type="hidden" name="week_ending" value="{{ week_ending }}">
+            {% for uid in user_ids %}
+                <input type="hidden" name="user_ids" value="{{ uid }}">
+            {% endfor %}
+            {% for tpl in templates %}
+                <input type="hidden" name="shift-{{ forloop.counter0 }}-start" value="{{ tpl.start }}">
+                <input type="hidden" name="shift-{{ forloop.counter0 }}-end" value="{{ tpl.end }}">
+                <input type="hidden" name="shift-{{ forloop.counter0 }}-count" value="{{ tpl.count }}">
+            {% endfor %}
+            <button type="submit" name="save" value="1">Save Schedule</button>
+        </form>
+
+        <form method="post" action="{% url 'main:make_schedule' %}" style="display:inline-block;">
+            {% csrf_token %}
+            <input type="hidden" name="week_ending" value="{{ week_ending }}">
+            {% for uid in user_ids %}
+                <input type="hidden" name="user_ids" value="{{ uid }}">
+            {% endfor %}
+            {% for tpl in templates %}
+                <input type="hidden" name="shift-{{ forloop.counter0 }}-start" value="{{ tpl.start }}">
+                <input type="hidden" name="shift-{{ forloop.counter0 }}-end" value="{{ tpl.end }}">
+                <input type="hidden" name="shift-{{ forloop.counter0 }}-count" value="{{ tpl.count }}">
+            {% endfor %}
+            <input type="hidden" name="relax" value="1">
+            <button type="submit" name="save" value="1">Relax Constraints & Save</button>
+        </form>
+    </div>
+
+    <div style="margin-top:15px;">
+        <a href="{% url 'main:select_week_ending_view' %}">Cancel and choose another week/users</a>
+    </div>
+</section>
+{% endblock %}

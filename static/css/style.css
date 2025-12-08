@@ -122,17 +122,55 @@ header {
   vertical-align: middle;
 }
 
+nav {
+  display: flex;
+  align-items: center;
+}
+
 .nav-links {
-  margin-top: 5px;
   list-style: none;
   display: flex;
   gap: 1.5rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
 }
 
-.nav-links a {
-  color: white;
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 999px;
   text-decoration: none;
+  color: #e5e7eb;
+  font-size: 0.9rem;
   font-weight: 500;
+  border: 1px solid transparent;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.nav-link i {
+  width: 16px;
+  height: 16px;
+}
+
+/* hover for normal links */
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* active tab (Dashboard) */
+.nav-link-active {
+  background: #111827;
+  color: #ffffff;
+  border-color: #f9fafb;
+  box-shadow: 0 0 0 1px #f9fafb;   /* white outline like screenshot */
 }
 
 .hero {

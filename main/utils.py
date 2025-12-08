@@ -1,14 +1,14 @@
 import calendar
-from .models import Shift, Notification, TimeOff
-from datetime import datetime
+import datetime
+from .models import Availability, Shift, Notification, TimeOff
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.utils import timezone
-from datetime import date, timedelta
 import logging
 from functools import wraps
 from main import admin_roles
+import re
 
 User = get_user_model()
 logger = logging.getLogger('main')
@@ -36,19 +36,19 @@ def make_notification(text, user):
 
 def generate_7day_schedule(user, day=None):
     if not day:
-        day = date.today()
+        day = datetime.date.today()
 
     shifts = Shift.objects.filter(
         employee=user,
-        date__gte=datetime.now().date()
+        date__gte=datetime.datetime.now().date()
     )
 
-    one_week_from_day = day + timedelta(days=7)
+    one_week_from_day = day + datetime.timedelta(days=7)
     shifts = [s for s in shifts if day <= s.date <= one_week_from_day]
 
     context = {}
     for i in range(7):
-        current_day = day + timedelta(days=i)
+        current_day = day + datetime.timedelta(days=i)
         day_shifts = [s for s in shifts if s.date == current_day]
         context[f"day{i+1}"] = {
             "date": current_day,
@@ -84,8 +84,21 @@ def manage_requests(requests, user):
             notif.save()
             timeoff_request.save()
 
+def get_week_endings():
+    today = timezone.localdate()
+    days_until_saturday = (5 - today.weekday()) % 7
+    first_saturday = today + datetime.timedelta(days=days_until_saturday)
+
+    return [
+        (first_saturday + datetime.timedelta(weeks=i)).isoformat()
+        for i in range(12)
+    ]
+
+def get_users_by_post_ids(id_list):
+    return User.objects.filter(id__in=id_list)
+
 def get_calendar_context(user, year=None, month=None):
-    now = datetime.now()
+    now = datetime.datetime.now()
     year = year or now.year
     month = month or now.month
 
@@ -111,7 +124,7 @@ def get_calendar_context(user, year=None, month=None):
         num_days = (t.end_time.date() - t.start_time.date()).days
 
         for i in range(num_days + 1):
-            current_day = t.start_time.date() + timedelta(days=i)
+            current_day = t.start_time.date() + datetime.timedelta(days=i)
             notes[current_day.day] = f"Time Off {t.type}"
 
     cal = shiftHTMLCalendar(notes=notes)
@@ -122,8 +135,8 @@ def get_calendar_context(user, year=None, month=None):
     next_month = month + 1 if month < 12 else 1
     next_year = year + 1 if month == 12 else year
 
-    today = date.today()
-    one_week_from_now = today + timedelta(days=7)
+    today = datetime.date.today()
+    one_week_from_now = today + datetime.timedelta(days=7)
 
     shifts = [
         s for s in shifts
@@ -156,11 +169,15 @@ def trim_user_info(users):
 def parse_iso_string(iso_string):
     # take iso string from html date time input and make it timezone aware with django
 
-    fixed_string = datetime.fromisoformat(iso_string)
-    fixed_string = timezone.make_aware(fixed_string, timezone.get_current_timezone())
+    try:
+        fixed_string = datetime.fromisoformat(iso_string)
+        fixed_string = timezone.make_aware(fixed_string, timezone.get_current_timezone())
+    except:
+        return False
+    
+
 
     return fixed_string
-
 
 def manager_required(view_func):
     @wraps(view_func)
@@ -173,3 +190,258 @@ def manager_required(view_func):
         return redirect("main:home")
     
     return wrapper
+
+def get_availability_context(user):
+    try:
+        availability = Availability.objects.get(employee=user)
+    except Availability.DoesNotExist:
+        availability = None
+
+    context = {}
+    
+    if availability:
+        week = availability.week
+        for day_num, times in week.items():
+            day_name = calendar.day_name[int(day_num)]
+            context[day_name.lower()] = times
+    else:
+        for i in range(7):
+            day_name = calendar.day_name[i]
+            context[day_name.lower()] = {"start": "07:00", "end": "22:00"}
+
+    return context
+
+
+def get_week_dates_from_week_ending(week_ending_date):
+    """Given a week ending date (Saturday), return list of 7 dates from Sunday..Saturday."""
+    if isinstance(week_ending_date, str):
+        week_ending_date = datetime.date.fromisoformat(week_ending_date)
+
+    week_start = week_ending_date - datetime.timedelta(days=6)
+    return [week_start + datetime.timedelta(days=i) for i in range(7)]
+
+
+def parse_shift_templates_from_post(post_data):
+    """Parse submitted shift templates from POST data.
+
+    Expected keys like `shift-<idx>-name`, `shift-<idx>-start`, `shift-<idx>-end`, `shift-<idx>-count`.
+    Returns list of templates: {"name":..., "start": "HH:MM", "end": "HH:MM", "count": int}
+    """
+    templates = {}
+
+    # accept both `shift-<idx>-field` and legacy `start_time_<idx>` naming
+    for key, value in post_data.items():
+        m = re.match(r"shift-(\d+)-([a-zA-Z_]+)", key)
+        if m:
+            idx = int(m.group(1))
+            field = m.group(2)
+            templates.setdefault(idx, {})[field] = value
+            continue
+
+        m2 = re.match(r"start_time_(\d+)", key)
+        if m2:
+            idx = int(m2.group(1))
+            templates.setdefault(idx, {})["start_time"] = value
+            continue
+
+        m3 = re.match(r"end_time_(\d+)", key)
+        if m3:
+            idx = int(m3.group(1))
+            templates.setdefault(idx, {})["end_time"] = value
+            continue
+
+        m4 = re.match(r"num_people_(\d+)", key)
+        if m4:
+            idx = int(m4.group(1))
+            templates.setdefault(idx, {})["count"] = value
+            continue
+
+    result = []
+    for idx in sorted(templates.keys()):
+        t = templates[idx]
+        try:
+            count = int(t.get("count") or t.get("people") or 1)
+        except ValueError:
+            count = 1
+
+        result.append({
+            "name": t.get("name") or t.get("role") or f"Shift {idx}",
+            "start": t.get("start") or t.get("start_time"),
+            "end": t.get("end") or t.get("end_time"),
+            "count": count,
+        })
+
+    return result
+
+
+def _time_from_hhmm_string(s):
+    if not s:
+        return None
+    try:
+        return datetime.datetime.strptime(s, "%H:%M").time()
+    except Exception:
+        try:
+            return datetime.datetime.fromisoformat(s).time()
+        except Exception:
+            return None
+
+
+def is_employee_available(employee, day_date, shift_start_str, shift_end_str):
+    """Return True if employee is available on day_date for shift start/end times.
+
+    Checks Availability.week, TimeOff overlaps, and existing Shift overlaps.
+    """
+    # parse shift times
+    s_time = _time_from_hhmm_string(shift_start_str)
+    e_time = _time_from_hhmm_string(shift_end_str)
+    if not s_time or not e_time:
+        return False
+
+    # availability
+    try:
+        availability = Availability.objects.get(employee=employee)
+        # Availability.week uses 0 = Sunday per project convention
+        # Python weekday(): Monday=0 .. Sunday=6 -> convert
+        day_num = (day_date.weekday() + 1) % 7
+        day_info = availability.week.get(str(day_num))
+        if day_info:
+            avail_start = _time_from_hhmm_string(day_info.get("start"))
+            avail_end = _time_from_hhmm_string(day_info.get("end"))
+            if not (avail_start and avail_end):
+                return False
+            if s_time < avail_start or e_time > avail_end:
+                return False
+    except Availability.DoesNotExist:
+        # no availability -> assume full day available
+        pass
+
+    # check time off overlap (treat any timeoff as blocking)
+    shift_start_dt = datetime.datetime.combine(day_date, s_time)
+    shift_end_dt = datetime.datetime.combine(day_date, e_time)
+    shift_start_dt = timezone.make_aware(shift_start_dt, timezone.get_current_timezone())
+    shift_end_dt = timezone.make_aware(shift_end_dt, timezone.get_current_timezone())
+
+    # consider only approved time off as blocking
+    timeoffs = TimeOff.objects.filter(employee=employee, approved=True)
+    for t in timeoffs:
+        # if overlap
+        if t.start_time <= shift_end_dt and t.end_time >= shift_start_dt:
+            return False
+
+    # check existing assigned shifts overlapping
+    existing = Shift.objects.filter(employee=employee, date=day_date)
+    for s in existing:
+        # convert shift's start/end (TimeField) to datetimes
+        s_dt = datetime.datetime.combine(day_date, s.start_time)
+        e_dt = datetime.datetime.combine(day_date, s.end_time)
+        s_dt = timezone.make_aware(s_dt, timezone.get_current_timezone())
+        e_dt = timezone.make_aware(e_dt, timezone.get_current_timezone())
+        if s_dt <= shift_end_dt and e_dt >= shift_start_dt:
+            return False
+
+    return True
+
+
+def create_schedule(user_qs, week_ending_date, templates, commit=True, relax=False):
+    """Create or simulate shifts for the week defined by week_ending_date (Saturday) using templates.
+
+    user_qs: queryset or list of user objects
+    templates: list of {name, start, end, count}
+    commit: if False, do not persist shifts; return plan dicts instead
+    relax: if True, ignore availability and timeoff checks (but still enforce 40h weekly limit)
+
+    Returns list of created Shift objects when commit=True, otherwise list of dicts:
+      {"date": date, "start": time, "end": time, "employee": user or None}
+    """
+    users = list(user_qs)
+    week_dates = get_week_dates_from_week_ending(week_ending_date)
+
+    # track assigned counts and hours per user to balance and limit to 40h
+    assigned_counts = {u.id: 0 for u in users}
+    assigned_hours = {u.id: 0.0 for u in users}
+
+    # include existing shifts in the week when computing hours
+    for u in users:
+        existing = Shift.objects.filter(employee=u, date__in=week_dates)
+        total = 0.0
+        for s in existing:
+            # compute duration in hours
+            dt_s = datetime.datetime.combine(s.date, s.start_time)
+            dt_e = datetime.datetime.combine(s.date, s.end_time)
+            total += (dt_e - dt_s).total_seconds() / 3600.0
+        assigned_hours[u.id] = total
+
+    plan = []
+    created_objs = []
+
+    for day in week_dates:
+        for tpl in templates:
+            start_key = tpl.get("start") or tpl.get("start_time")
+            end_key = tpl.get("end") or tpl.get("end_time")
+            for i in range(int(tpl.get("count", 1))):
+                s_time = _time_from_hhmm_string(start_key) or datetime.datetime.strptime("07:00", "%H:%M").time()
+                e_time = _time_from_hhmm_string(end_key) or datetime.datetime.strptime("15:00", "%H:%M").time()
+
+                # compute shift duration in hours
+                dur = (datetime.datetime.combine(day, e_time) - datetime.datetime.combine(day, s_time)).total_seconds() / 3600.0
+
+                # find candidates
+                if relax:
+                    candidates = list(users)
+                else:
+                    candidates = [u for u in users if is_employee_available(u, day, start_key, end_key)]
+
+                # remove candidates who are already assigned in our in-memory plan to overlapping shifts
+                if not commit:
+                    def overlaps(a_start, a_end, b_start, b_end):
+                        return not (a_end <= b_start or b_end <= a_start)
+
+                    filtered = []
+                    for u in candidates:
+                        already = False
+                        for p in plan:
+                            if p['employee'] and p['employee'].id == u.id and p['date'] == day:
+                                # check time overlap
+                                if overlaps(
+                                    datetime.datetime.combine(day, p['start']),
+                                    datetime.datetime.combine(day, p['end']),
+                                    datetime.datetime.combine(day, s_time),
+                                    datetime.datetime.combine(day, e_time),
+                                ):
+                                    already = True
+                                    break
+                        if not already:
+                            filtered.append(u)
+                    candidates = filtered
+
+                # filter out candidates who would exceed 40 hours
+                candidates = [u for u in candidates if assigned_hours.get(u.id, 0.0) + dur <= 40.0]
+
+                # sort by assigned count then hours
+                candidates.sort(key=lambda u: (assigned_counts.get(u.id, 0), assigned_hours.get(u.id, 0.0)))
+
+                assigned = None
+                if candidates:
+                    assigned = candidates[0]
+                    assigned_counts[assigned.id] = assigned_counts.get(assigned.id, 0) + 1
+                    assigned_hours[assigned.id] = assigned_hours.get(assigned.id, 0.0) + dur
+
+                entry = {
+                    "date": day,
+                    "start": s_time,
+                    "end": e_time,
+                    "employee": assigned,
+                }
+
+                if commit:
+                    obj = Shift.objects.create(
+                        date=day,
+                        start_time=s_time,
+                        end_time=e_time,
+                        employee=assigned,
+                    )
+                    created_objs.append(obj)
+                else:
+                    plan.append(entry)
+
+    return created_objs if commit else plan
