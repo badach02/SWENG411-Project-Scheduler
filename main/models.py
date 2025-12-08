@@ -28,8 +28,6 @@ class Availability(models.Model):
     def __str__(self):
         return f"Availability for {self.employee.username}"
 
-
-    
 class Request(models.Model):
     request_date = models.DateField(default=date.today)
     start_time = models.DateTimeField(default=current_time)
@@ -51,7 +49,6 @@ class Shift(models.Model):
         emp_name = self.employee.username if self.employee else "Unassigned"
         return f"{self.date} {self.start_time}-{self.end_time} ({self.role}) - {emp_name}"
 
-    
 class TimeOff(Request, models.Model):
     employee = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
     type = models.CharField(default="Unpaid")

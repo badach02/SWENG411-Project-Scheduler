@@ -6,15 +6,11 @@ from django.utils import timezone
 from django.utils.timezone import now
 from .models import Shift, TimeOff, Notification
 from .utils import *
-from .utils import (
-    parse_shift_templates_from_post,
-    create_schedule,
-    get_week_dates_from_week_ending,
-    _time_from_hhmm_string,
-)
 from datetime import datetime, date, timedelta
 from main import request_types, admin_roles
 from django.urls import reverse
+
+from .utils import _time_from_hhmm_string
 
 def home_view(request):
     if request.user.is_authenticated and request.method == 'GET':
@@ -216,14 +212,11 @@ def select_week_ending_view(request):
     week_dates = get_week_endings()
 
     if request.method == "GET":
-        # allow user_ids to be passed as query params when redirected from user selection
         user_ids = request.GET.getlist("user_ids") or request.GET.get("user_ids")
         users_qs = None
         if user_ids:
-            # user_ids may be a getlist (list) or a single string (potentially comma-separated)
             parsed_ids = []
             if isinstance(user_ids, str):
-                # comma-separated string
                 for part in user_ids.split(","):
                     part = part.strip()
                     if part:
@@ -232,7 +225,6 @@ def select_week_ending_view(request):
                         except ValueError:
                             pass
             else:
-                # list from getlist
                 for item in user_ids:
                     for part in str(item).split(","):
                         part = part.strip()
@@ -245,14 +237,11 @@ def select_week_ending_view(request):
             users_qs = get_users_by_post_ids(user_ids)
         return render(request, "select_week_ending.html", {"week_dates": week_dates, "users": users_qs})
 
-    # POST: expect week_ending or custom_date and a list of user ids (hidden inputs named 'user_ids')
     week_ending = request.POST.get("week_ending")
     custom = request.POST.get("custom_date")
     chosen = week_ending or custom
 
-    # user ids can be submitted as multiple inputs or a comma-separated string
     user_ids = request.POST.getlist("user_ids") or request.POST.get("user_ids")
-    # fallback: maybe checkboxes submitted as user-<id>
     if not user_ids:
         user_ids = [
             int(k.split("-")[1])
@@ -284,16 +273,13 @@ def select_week_ending_view(request):
             "users": get_users_by_post_ids(user_ids)
         })
 
-    # ensure there are selected users
     if not user_ids:
-        # no users selected — redirect back to make schedule page with an error
         users_all = User.objects.all()
         return render(request, "makeschedule.html", {
             "users": users_all,
             "error": "No users were selected. Please select users to include in the schedule."
         })
 
-    # render the shifts-to-cover page with the selected users and week ending
     users_qs = get_users_by_post_ids(user_ids)
     return render(request, "shifts_to_cover.html", {
         "selected_week": chosen_date.isoformat(),
@@ -308,14 +294,12 @@ def user_selection_view(request):
         return render(request, "makeschedule.html", {"users": users})
 
     elif request.method == "POST":
-        # read selected users from checkboxes named 'user_ids'
         selected_users = request.POST.getlist('user_ids') or []
         try:
             selected_users = [int(u) for u in selected_users]
         except Exception:
             selected_users = []
 
-        # redirect to the week chooser and include selected user ids in querystring
         if not selected_users:
             users = User.objects.all()
             return render(request, "makeschedule.html", {"users": users, "error": "No users selected."})
@@ -333,9 +317,6 @@ def make_schedule_view(request):
             if key.startswith("user-")
         ]
 
-        # The shifts_to_cover form should POST shift entries named like
-        # shift-0-name, shift-0-start, shift-0-end, shift-0-count, etc.
-        # Also expect a `week_ending` field and `user_ids` (multiple or comma-separated)
         user_ids = request.POST.getlist("user_ids") or request.POST.get("user_ids")
         parsed_ids = []
         if isinstance(user_ids, str):
@@ -350,7 +331,6 @@ def make_schedule_view(request):
                     try:
                         parsed_ids.append(int(part))
                     except ValueError:
-                        # skip invalid entries
                         pass
 
         user_ids = parsed_ids
@@ -361,13 +341,11 @@ def make_schedule_view(request):
 
         templates = parse_shift_templates_from_post(request.POST)
 
-        # basic validation of templates: ensure start and end parse and start < end
         validated_templates = []
         bad = None
         for t in parse_shift_templates_from_post(request.POST):
             start = t.get('start') or t.get('start_time')
             end = t.get('end') or t.get('end_time')
-            # try parse
             s_time = None
             e_time = None
             try:
@@ -389,7 +367,6 @@ def make_schedule_view(request):
             validated_templates.append(t)
 
         if bad:
-            # re-render the shifts page with error
             users_qs = get_users_by_post_ids(user_ids)
             return render(request, 'shifts_to_cover.html', {
                 'users': users_qs,
@@ -401,11 +378,9 @@ def make_schedule_view(request):
 
         users_qs = get_users_by_post_ids(user_ids)
 
-        # Preview requested -> simulate schedule without committing
         if request.POST.get("preview"):
             plan = create_schedule(users_qs, date.fromisoformat(week_ending), templates, commit=False, relax=False)
 
-            # prepare simple serializable template objects for hidden inputs
             simple_templates = []
             for t in templates:
                 simple_templates.append({
@@ -422,18 +397,15 @@ def make_schedule_view(request):
                 "week_start": (date.fromisoformat(week_ending) - timedelta(days=6)).isoformat(),
             })
 
-        # Save requested -> commit plan (optionally relaxed)
         if request.POST.get("save"):
             relax = bool(request.POST.get("relax"))
             created = create_schedule(users_qs, date.fromisoformat(week_ending), templates, commit=True, relax=relax)
-            # create notifications for each user that a new schedule was posted
             for u in users_qs:
                 try:
                     notif_text = f"New schedule posted for week ending {week_ending}. Please check your shifts."
                     n = Notification(date=timezone.now(), notif_text=notif_text, employee=u)
                     n.save()
                 except Exception:
-                    # don't block save on notification errors
                     pass
 
             return redirect("main:manager")
