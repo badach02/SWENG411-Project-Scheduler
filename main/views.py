@@ -9,7 +9,6 @@ from .utils import *
 from datetime import datetime, date, timedelta
 from main import request_types, admin_roles
 from django.urls import reverse
-
 from .utils import _time_from_hhmm_string
 
 def home_view(request):
