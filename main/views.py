@@ -42,6 +42,8 @@ def dashboard_view(request):
             "total_employees": total_employees,
         }
 
+        context = context | generate_7day_schedule(request.user)
+
         return render(request, "dashboard.html", context)
 
 

@@ -5,85 +5,10 @@
 <section class="hero">
     <div class="schedule-container">
         <div class="schedule-card">
-            <table class="shift-table">
-                <tr>
-                    <th colspan="2">Next 7 Days</th>
-                </tr>
-
-                <!-- Day 1 -->
-                <tr>
-                    <td>{{ day1.date }}</td>
-                    {% if day1.shift %}
-                        <td>{{ day1.shift.start_time }} - {{ day1.shift.end_time }} - {{ day1.shift.role }}</td>
-                    {% else %}
-                        <td>Day Off</td>
-                    {% endif %}
-                </tr>
-
-                <!-- Day 2 -->
-                <tr>
-                    <td>{{ day2.date }}</td>
-                    {% if day2.shift %}
-                        <td>{{ day2.shift.start_time }} - {{ day2.shift.end_time }} - {{ day2.shift.role }}</td>
-                    {% else %}
-                        <td>Day Off</td>
-                    {% endif %}
-                </tr>
-
-                <!-- Day 3 -->
-                <tr>
-                    <td>{{ day3.date }}</td>
-                    {% if day3.shift %}
-                        <td>{{ day3.shift.start_time }} - {{ day3.shift.end_time }} - {{ day3.shift.role }}</td>
-                    {% else %}
-                        <td>Day Off</td>
-                    {% endif %}
-                </tr>
-
-                <!-- Day 4 -->
-                <tr>
-                    <td>{{ day4.date }}</td>
-                    {% if day4.shift %}
-                        <td>{{ day4.shift.start_time }} - {{ day4.shift.end_time }} - {{ day4.shift.role }}</td>
-                    {% else %}
-                        <td>Day Off</td>
-                    {% endif %}
-                </tr>
-
-                <!-- Day 5 -->
-                <tr>
-                    <td>{{ day5.date }}</td>
-                    {% if day5.shift %}
-                        <td>{{ day5.shift.start_time }} - {{ day5.shift.end_time }} - {{ day5.shift.role }}</td>
-                    {% else %}
-                        <td>Day Off</td>
-                    {% endif %}
-                </tr>
-
-                <!-- Day 6 -->
-                <tr>
-                    <td>{{ day6.date }}</td>
-                    {% if day6.shift %}
-                        <td>{{ day6.shift.start_time }} - {{ day6.shift.end_time }} - {{ day6.shift.role }}</td>
-                    {% else %}
-                        <td>Day Off</td>
-                    {% endif %}
-                </tr>
-
-                <!-- Day 7 -->
-                <tr>
-                    <td>{{ day7.date }}</td>
-                    {% if day7.shift %}
-                        <td>{{ day7.shift.start_time }} - {{ day7.shift.end_time }} - {{ day7.shift.role }}</td>
-                    {% else %}
-                        <td>Day Off</td>
-                    {% endif %}
-                </tr>
-            </table>
 
             <form method="post" class="availability-form">
                 {% csrf_token %}
-                <table class="availability-table">
+                <table class="shift-table">
                     <tr>
                         <th>Availability</th>
                         <th>Start</th>

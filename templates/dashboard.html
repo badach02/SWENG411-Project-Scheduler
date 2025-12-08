@@ -46,27 +46,33 @@
 
     <div class="dashboard-row">
         <div class="card shifts-card">
-            <h6>Today's Shifts</h6>
+            <h6>This Week's Shifts</h6>
+                <table class="shifts-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Shift</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for day in week %}
+                            <tr>
+                                <td>{{ day.date }}</td>
 
-            <table class="shifts-table">
-                <thead>
-                    <tr>
-                        <th>Employee</th>
-                        <th>Role</th>
-                        <th>Time</th>
-                        <th>Shift</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>—</td>
-                        <td>—</td>
-                        <td>—</td>
-                        <td><span class="badge badge-morning">Morning</span></td>
-                    </tr>
-                </tbody>
-            </table>
+                                {% if day.shift %}
+                                    <td>{{ day.shift.start_time }} - {{ day.shift.end_time }}</td>
+                                    <td>{{ day.shift.role }}</td>
+                                {% else %}
+                                    <td colspan="2" class="day-off">Day Off</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
         </div>
+
+        
 
 
         <div class="card quick-card">
