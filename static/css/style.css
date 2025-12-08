@@ -1,5 +1,5 @@
 body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
   margin: 0;
   background-color: #f5f6fa;
   color: #333;
@@ -122,17 +122,55 @@ header {
   vertical-align: middle;
 }
 
+nav {
+  display: flex;
+  align-items: center;
+}
+
 .nav-links {
-  margin-top: 5px;
   list-style: none;
   display: flex;
   gap: 1.5rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
 }
 
-.nav-links a {
-  color: white;
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 999px;
   text-decoration: none;
+  color: #e5e7eb;
+  font-size: 0.9rem;
   font-weight: 500;
+  border: 1px solid transparent;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.nav-link i {
+  width: 16px;
+  height: 16px;
+}
+
+/* hover for normal links */
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* active tab (Dashboard) */
+.nav-link-active {
+  background: #111827;
+  color: #ffffff;
+  border-color: #f9fafb;
+  box-shadow: 0 0 0 1px #f9fafb;   /* white outline like screenshot */
 }
 
 .hero {
@@ -147,7 +185,6 @@ header {
     margin: 10px 0;
     color: #333;
 }
-
 
 .settings-form {
     display: flex;
@@ -185,7 +222,7 @@ header {
 }
 
 .hero h2 {
-  text-align: center;
+  text-align: left;
 }
 
 .hero-text {
@@ -194,14 +231,14 @@ header {
 
 .btn {
   display: inline-block;
-  padding: 8px 14px;
+  padding: 10px 14px;
   background: #4CAF50;
   color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   text-decoration: none;
-  font-size: 0.9em;
+  font-size: 1.1em;
 }
 
 .login-form {
@@ -267,8 +304,6 @@ header {
     visibility: hidden;
 }
 
-
-
 .login-form button:hover {
   background: #3e444b54;
 }
@@ -277,7 +312,7 @@ header {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  gap: 30px;
   margin-top: 40px;
 }
 
@@ -286,7 +321,7 @@ header {
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 20px;
-  width: 260px;
+  width: 370px;
   text-align: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: 0.2s ease-in-out;
@@ -475,4 +510,152 @@ table.month td.today {
   table.month caption {
     font-size: 1.3rem;
   }
+}
+
+
+/* Today's Shifts and Quick Actions Left and Right*/
+/* === Layout row for shifts + quick actions === */
+.dashboard-row {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* Make cards more like the mockup */
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+}
+
+/* Left card wider, right card narrower */
+.shifts-card {
+    width: 1210px;
+    height: 500px;
+    flex: 3;
+}
+
+.quick-card {
+    flex: 2;
+    width: 400px;
+    height: 500px;
+}
+
+/* Card title */
+.card h3 {
+    margin-bottom: 16px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* ===== Today's Shifts table – cleaner like design ===== */
+.shifts-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.shifts-table thead th {
+    text-align: left;
+    padding: 10px 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.shifts-table tbody td {
+    padding: 14px 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.9rem;
+    color: #374151;
+}
+
+/* Last row without bottom border (clean edge) */
+.shifts-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Subtle row hover */
+.shifts-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+/* Shift badges */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.badge-morning {
+    background: #0ea5e9;
+}
+
+/* ===== Quick Actions styling ===== */
+.actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.actions-list .btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #334155;
+}
+
+/* Base quick action button (like white outline buttons) */
+.quick-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    color: #111827;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+/* Hover effect */
+.quick-btn:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+/* Dark primary button at top */
+.quick-btn.primary {
+    background: #111827;
+    color: #ffffff;
+    border-color: #111827;
+}
+
+.quick-btn.primary:hover {
+    background: #0f172a;
+    border-color: #0f172a;
+}
+
+.dashboard-row h6 {
+    font-size: 30px;
+    text-align: left;
+    margin-top: 10px;
+}
+
+.shifts-table thead th {
+    font-size: 20px;
 }
