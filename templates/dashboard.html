@@ -17,8 +17,7 @@
 
         <div class="dashboard-card">
             <h3>Shifts This Week</h3>
-            <p>Request to trade a shift with another employee.</p>
-            <a href="{% url 'main:swap_shift' %}" class="btn">Swap Shift</a>
+            <p class="number">{{ total_shifts }}</p>
         </div>
 
         {% if user.account_type in admin_roles %}

@@ -36,11 +36,23 @@ def dashboard_view(request):
         
         total_employees = User.objects.filter(account_type="Employee").count()
 
+        today = now().date()
+        weekday = today.weekday()      # Monday = 0 ... Sunday = 6
+        # We want week ending Saturday (5)
+        week_end = today + timedelta(days=(5 - weekday) % 7)
+        week_start = week_end - timedelta(days=6)
+
+        total_shifts = Shift.objects.filter(
+            employee=request.user,
+            date__range=(week_start, week_end)
+        ).count()
+
         context = {
             "role": request.user.account_type,
             "admin_roles": admin_roles,
             "notifications": notifs,
             "total_employees": total_employees,
+            "total_shifts": total_shifts,   # 👈 add this line
         }
 
         context = context | generate_7day_schedule(request.user)

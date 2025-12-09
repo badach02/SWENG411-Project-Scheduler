@@ -3,31 +3,61 @@
 {% block title %}Scheduler | Schedule System{% endblock %}
 
 {% block content %}
-<section class="hero">
-    <p> Scheduler </p>
-    <p> Create shifts you want to cover </p>
-        <form method="post" action="{% url 'main:make_schedule' %}">
-            {% csrf_token %}
-            <table class="user-table">
-                <tr>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Number of people to cover</th>
-                </tr>
-            </table>
-            <button id="add" type="button">Add Shift</button>
-            <button id="remove" type="button">Remove Shift</button>
-            <!-- include selected users as hidden inputs -->
-            {% for u in users %}
-                <input type="hidden" name="user_ids" value="{{ u.id }}">
-            {% endfor %}
-            <!-- week ending (ISO date) -->
-            <input type="hidden" name="week_ending" value="{{ selected_week }}">
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Scheduler</h1>
+    <p class="page-subtitle">Create the shifts you want to cover for this week.</p>
+  </div>
+</div>
 
-            <button type="submit" name="preview" value="1">Preview Schedule</button>
-            <button type="submit" name="save" value="1">Save (create shifts immediately)</button>
-        </form>
+<section class="card shifts-card">
+  <div class="card-header">
+    <h2 class="card-title">Shifts to Cover</h2>
+  </div>
 
-        <script src="{% static 'scripts/shifts_to_cover.js' %}"></script>
+  <form method="post" action="{% url 'main:make_schedule' %}">
+    {% csrf_token %}
+
+    <div class="shift-table-wrapper">
+      <table class="user-table shift-table">
+        <thead>
+          <tr>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Number of People</th>
+          </tr>
+        </thead>
+        <tbody id="shift-rows">
+          <!-- JS will add rows here -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="shift-controls">
+      <div class="shift-row-buttons">
+        <button id="add" type="button" class="btn-secondary">Add Shift</button>
+        <button id="remove" type="button" class="btn-ghost">Remove Shift</button>
+      </div>
+
+      <!-- hidden inputs for selected users -->
+      {% for u in users %}
+        <input type="hidden" name="user_ids" value="{{ u.id }}">
+      {% endfor %}
+
+      <!-- week ending (ISO date) -->
+      <input type="hidden" name="week_ending" value="{{ selected_week }}">
+
+      <div class="shift-submit-buttons">
+        <button type="submit" name="preview" value="1" class="btn-outline">
+          Preview Schedule
+        </button>
+        <button type="submit" name="save" value="1" class="btn-primary">
+          Save & Create Shifts
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <script src="{% static 'scripts/shifts_to_cover.js' %}"></script>
 </section>
 {% endblock %}
