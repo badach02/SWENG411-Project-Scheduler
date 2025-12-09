@@ -115,18 +115,18 @@ def time_off_view(request):
         return render(request, "timeoff.html", context)  
     
     elif request.method == "POST":
-        start_time_post = parse_iso_string(request.POST.get("start_time"))
-        end_time_post = parse_iso_string(request.POST.get("end_time"))
+        start_time = parse_iso_string(request.POST.get("start_time"))
+        end_time = parse_iso_string(request.POST.get("end_time"))
 
-        if start_time_post == False or end_time_post == False or start_time_post >= end_time_post or start_time_post < now():
+        if not start_time or not end_time or start_time >= end_time or start_time < timezone.now():
             return redirect("/timeoff?success=0")
         
         type_post= request.POST.get("type")
 
         timeoff_request = TimeOff(
-            request_date=datetime.now().date(),
-            start_time=start_time_post,
-            end_time=end_time_post,
+            request_date=timezone.localdate(),
+            start_time=start_time,
+            end_time=end_time,
             employee=request.user,
             type=type_post,
         )

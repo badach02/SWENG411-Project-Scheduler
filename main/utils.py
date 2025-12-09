@@ -175,16 +175,19 @@ def trim_user_info(users):
     return list(trimmed_users.values())
 
 def parse_iso_string(iso_string):
-    # take iso string from html date time input and make it timezone aware with django
+    if not iso_string:
+        return None
 
     try:
-        fixed_string = datetime.fromisoformat(iso_string)
-        fixed_string = timezone.make_aware(fixed_string, timezone.get_current_timezone())
-    except:
-        return False
-    
-    return fixed_string
+        if len(iso_string) == 16:
+            iso_string = iso_string + ":00"
 
+        dt = datetime.datetime.fromisoformat(iso_string)
+        return timezone.make_aware(dt, timezone.get_current_timezone())
+    except ValueError:
+        return None
+
+    
 def manager_required(view_func):
     @wraps(view_func)
     @login_required
