@@ -2,32 +2,47 @@
 {% block title %}Scheduler | Schedule System{% endblock %}
 
 {% block content %}
-<section class="hero">
-    <p> Scheduler </p>
-    <p> Select users you want to include in the schedule </p>
-        <form method="post">
-            {% csrf_token %}
-            <table class="user-table">
-                <tr>
-                    <th>Name</th>
-                    <th>Select</th>
-                </tr>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.first_name }} {{ user.last_name }}</td>
-                    <td>
-                        <label>
-                            <input type="checkbox" name="user_ids" value="{{ user.id }}">
-                        </label>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="2">No users found.</td>
-                </tr>
-                {% endfor %}
-            </table>
-            <button type="submit">Confirm</button>
-        </form>
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Scheduler</h1>
+    <p class="page-subtitle">Select the employees you want to include in the schedule.</p>
+  </div>
+</div>
+
+<section class="card user-select-card">
+  <div class="card-header">
+    <h2 class="card-title">Choose Employees</h2>
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Select</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.first_name }} {{ user.last_name }}</td>
+          <td class="select-cell">
+            <input type="checkbox" name="user_ids" value="{{ user.id }}">
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="2" class="empty-row">No users found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">Confirm Selection</button>
+    </div>
+  </form>
 </section>
 {% endblock %}

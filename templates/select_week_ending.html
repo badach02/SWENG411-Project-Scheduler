@@ -3,41 +3,58 @@
 {% block title %}Scheduler | Schedule System{% endblock %}
 
 {% block content %}
-    <section class="hero">
-    <h2>Select Week Ending (Saturday)</h2>
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Scheduler</h1>
+    <p class="page-subtitle">Select the week ending (Saturday) for this schedule.</p>
+  </div>
+</div>
 
-    <form method="post">
-        {% csrf_token %}
+<section class="card week-ending-card">
+  <div class="card-header">
+    <h2 class="card-title">Choose Week Ending</h2>
+  </div>
 
-        <div>
-            {% for date in week_dates %}
-            <label style="display:block; margin-bottom:6px;">
-                <input type="radio" name="week_ending" value="{{ date }}" {% if forloop.first %}checked{% endif %}>
-                {{ date }}
-            </label>
-            {% endfor %}
-        </div>
-        <!-- include selected users as hidden inputs when provided -->
-        {% if users %}
-            {% for u in users %}
-                <input type="hidden" name="user_ids" value="{{ u.id }}">
-            {% endfor %}
-        {% endif %}
-        <button type="submit">Confirm</button>
-    </form>
+  <form method="post" class="week-form">
+    {% csrf_token %}
 
-    {% if selected_week %}
-    <div style="margin-top:15px; background:#eef; padding:10px;">
-        Selected week ending: {{ selected_week }}
+    <div class="week-options">
+      {% for date in week_dates %}
+      <label class="week-option">
+        <input
+          type="radio"
+          name="week_ending"
+          value="{{ date }}"
+          {% if forloop.first %}checked{% endif %}
+        >
+        <span class="week-label-text">{{ date }}</span>
+      </label>
+      {% endfor %}
     </div>
+
+    {% if users %}
+      {% for u in users %}
+        <input type="hidden" name="user_ids" value="{{ u.id }}">
+      {% endfor %}
     {% endif %}
 
-    {% if error %}
-    <div style="margin-top:15px; background:#fee; padding:10px; color:#900;">
-        {{ error }}
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">Confirm Week</button>
     </div>
-    {% endif %}
+  </form>
 
-    <script src="{% static 'scripts/select_week_ending.js' %}"></script>
+  {% if selected_week %}
+  <div class="alert info-alert">
+    Selected week ending: <strong>{{ selected_week }}</strong>
+  </div>
+  {% endif %}
+
+  {% if error %}
+  <div class="alert error-alert">
+    {{ error }}
+  </div>
+  {% endif %}
 </section>
+
+<script src="{% static 'scripts/select_week_ending.js' %}"></script>
 {% endblock %}

@@ -2,10 +2,18 @@
 {% block title %}Scheduler | Schedule System{% endblock %}
 
 {% block content %}
-<section class="hero">
-    <p> Scheduler </p>
-    <a href="{% url 'main:schedule_maker' %}">
-        <button>Make schedules</button>
+<section class="hero scheduler-hero">
+  <div class="scheduler-text">
+    <h1 class="page-title">Scheduler</h1>
+    <p class="page-subtitle">
+      Create and manage weekly schedules for your team in one place.
+    </p>
+  </div>
+
+  <div class="scheduler-actions">
+    <a href="{% url 'main:schedule_maker' %}" class="btn-primary">
+      Make schedules
     </a>
+  </div>
 </section>
 {% endblock %}

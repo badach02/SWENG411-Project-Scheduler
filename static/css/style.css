@@ -182,6 +182,12 @@ nav {
   padding: 2rem;
 }
 
+.hero-text {
+  margin-left: -1250px;
+  font-size: 20px;
+  width: 100%;
+}
+
 .hero p {
     margin: 10px 0;
     color: #333;
@@ -677,15 +683,15 @@ table.month td.today {
 .page-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin: 2rem 2.5rem 1rem;
+  margin-left: 0;
 }
 
 .page-title {
   font-size: 2rem;
   font-weight: 700;
   color: #111827;
-  margin: 0;
+  margin-left: 10px;
 }
 
 .page-subtitle {
@@ -805,14 +811,6 @@ table.month td.today {
   color: #4b5563;
 }
 
-/* Actions (three dots) */
-.actions-cell {
-  text-align: right;
-  font-size: 1.2rem;
-  color: #9ca3af;
-  cursor: pointer;
-}
-
 .col-employee {
   width: 28%;
 }
@@ -836,4 +834,255 @@ table.month td.today {
   .employees-table {
     font-size: 20;
   }
+}
+
+
+/* Scheduler hero section */
+.scheduler-hero {
+  max-width: 1100px;
+  margin: 2rem auto 2rem;
+  padding: 1.5rem 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  border: 1px solid #e5e7eb;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.scheduler-text .page-title {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.scheduler-text .page-subtitle {
+  margin-top: 0.4rem;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* Primary button shared style */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+  border: none;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  background: #2563eb;      /* blue */
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
+}
+
+/* Responsive tweak */
+@media (max-width: 768px) {
+  .scheduler-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .scheduler-actions {
+    width: 100%;
+  }
+
+  .scheduler-actions .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+
+/* Card for user selection */
+.user-select-card {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+}
+
+/* User selection table */
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.user-table thead tr {
+  background: #f3f4f6;
+}
+
+.user-table th {
+  padding: 0.75rem;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: #6b7280;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.user-table td {
+  padding: 0.85rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.user-table tr:hover {
+  background: #f9fafb;
+}
+
+.select-cell {
+  text-align: center;
+}
+
+/* Empty table message */
+.empty-row {
+  text-align: center;
+  padding: 1rem;
+  color: #9ca3af;
+}
+
+/* Form actions */
+.form-actions {
+  margin-top: 1.5rem;
+  text-align: right;
+}
+
+/* Primary button */
+.btn-primary {
+  background: #2563eb;
+  color: white;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+
+/* Week ending card */
+.week-ending-card {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+}
+
+/* Form layout */
+.week-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* List of week options */
+.week-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Individual option row */
+.week-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.week-option:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.week-option input[type="radio"] {
+  accent-color: #2563eb; /* modern browsers */
+}
+
+.week-label-text {
+  font-size: 0.95rem;
+  color: #111827;
+}
+
+/* Form actions */
+.form-actions {
+  text-align: right;
+}
+
+/* Primary button (reuse style from other pages if you already have it) */
+.btn-primary {
+  background: #2563eb;
+  color: white;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Alerts */
+.alert {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.info-alert {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.error-alert {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
 }
