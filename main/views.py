@@ -2,6 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
+from .models import Notification
 
 User = get_user_model()
 from django.contrib.auth.decorators import login_required
@@ -42,6 +43,8 @@ def dashboard_view(request):
             "total_employees": total_employees,
         }
 
+        context = context | generate_7day_schedule(request.user)
+
         return render(request, "dashboard.html", context)
 
 
@@ -81,6 +84,10 @@ def schedule_view(request):
     context = context | get_availability_context(request.user)
     
     return render(request, "schedule.html", context)
+
+
+def employee_view(request):
+    return render(request, 'employee.html')
 
 
 @login_required
@@ -539,6 +546,9 @@ def register_view(request):
 
     return render(request, "register.html")
 
+def notification_view(request):
+    notifications = Notification.objects.all().order_by('-date')
+    return render(request, "notification.html", {"notifications": notifications})
 
 ### API
 

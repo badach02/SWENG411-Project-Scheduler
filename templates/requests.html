@@ -82,48 +82,8 @@
                     </table>
 
                     <button type="submit">Confirm</button>
-                </form>
-                {% csrf_token %}
-                <input type="hidden" name="timeoff_submit" value="1">
-
-                <table class="request-table">
-                    <tr>
-                        <th>Employee</th>
-                        <th>Date Requested</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                    </tr>
-                    {% for request in timeoff_requests %}
-                    <tr>
-                        <td>{{ request.employee.first_name }} {{ request.employee.last_name }}</td>
-                        <td>{{ request.request_date }}</td>
-                        <td>{{ request.start_time }}</td>
-                        <td>{{ request.end_time }}</td>
-                        <td>{{ request.type }}</td>
-                        <td>
-                            <label>
-                                <input type="radio" name="decision-{{ request.id }}" value="approve" checked>
-                                Approve
-                            </label>
-                            <label>
-                                <input type="radio" name="decision-{{ request.id }}" value="deny">
-                                Deny
-                            </label>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6">No time-off requests found.</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-
-                <button type="submit">Confirm Time-off Decisions</button>
-            </form>
+            </form> 
         </div>
-
     </div>
 
     <a href="{% url 'main:manager' %}">Back to menu</a>

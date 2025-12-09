@@ -47,13 +47,21 @@ def generate_7day_schedule(user, day=None):
     shifts = [s for s in shifts if day <= s.date <= one_week_from_day]
 
     context = {}
+    days_list = []
+
     for i in range(7):
         current_day = day + datetime.timedelta(days=i)
         day_shifts = [s for s in shifts if s.date == current_day]
-        context[f"day{i+1}"] = {
+
+        entry = {
             "date": current_day,
             "shift": day_shifts[0] if day_shifts else None
         }
+
+        context[f"day{i+1}"] = entry
+        days_list.append(entry)
+
+    context["week"] = days_list
 
     return context
 

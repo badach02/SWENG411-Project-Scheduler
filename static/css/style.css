@@ -134,6 +134,7 @@ nav {
   align-items: center;
   margin: 0;
   padding: 0;
+  margin-left: 400px;
 }
 
 .nav-link {
@@ -347,8 +348,19 @@ nav {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
+/* notifications tab */
+.notifications-card {
+  max-width: 1500px;      /* adjust width as you like */
+  margin: 0 auto 2rem;   /* centers horizontally */
+}
+
+.page-header h1,
+.page-header p {
+  margin-left: 75px;
+}
+
 .notif-table {
-    width: 60%;
+    width: 100%;
     border-collapse: collapse;
     font-family: Arial, sans-serif;
     margin: 20px 0;
@@ -658,4 +670,170 @@ table.month td.today {
 
 .shifts-table thead th {
     font-size: 20px;
+}
+
+/* employee page */
+/* Page layout around the card */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 2.5rem 1rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.page-subtitle {
+  margin: 0.25rem 0 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.card-title {
+  font-size: 25px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.employees-card,
+.page-header {
+    max-width: 1700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Employees table */
+.employees-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 20px;
+  position: center;
+  max-width: 1500px;
+}
+
+.employees-table thead tr {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.employees-table th,
+.employees-table td {
+  padding: 0.85rem 0.5rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.employees-table th {
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #8d949e;
+  font-weight: 600;
+}
+
+.employees-table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.employees-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.employees-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Employee cell (avatar + name) */
+.employee-cell {
+  padding-left: 0.25rem;
+}
+
+.employee-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.employee-name {
+  font-weight: 500;
+  color: #111827;
+}
+
+/* Status pills */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-inactive {
+  background: #e5e7eb;
+  color: #4b5563;
+}
+
+/* Actions (three dots) */
+.actions-cell {
+  text-align: right;
+  font-size: 1.2rem;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.col-employee {
+  width: 28%;
+}
+
+.col-actions {
+  text-align: right;
+  width: 8%;
+}
+
+/* Optional: responsive tweak */
+@media (max-width: 900px) {
+  .card {
+    margin: 0 1rem 1.5rem;
+    padding: 1.25rem 1.25rem 1rem;
+  }
+
+  .page-header {
+    margin: 1.5rem 1.25rem 0.75rem;
+  }
+
+  .employees-table {
+    font-size: 20;
+  }
 }

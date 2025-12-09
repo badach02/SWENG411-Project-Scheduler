@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Notifications | Schedule System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Notifications</h1>
+    <p class="page-subtitle">View recent updates related to your schedule and employees.</p>
+  </div>
+</div>
+
+<section class="card notifications-card">
+  <div class="card-header">
+    <h2 class="card-title">Recent Notifications</h2>
+  </div>
+
+  <table class="notif-table">
+    <thead>
+      <tr>
+        <th colspan="2">Notifications</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for notif in notifications %}
+      <tr>
+        <td class="notif-date">{{ notif.date|date:"M d, Y H:i" }}</td>
+        <td class="notif-text">{{ notif.notif_text }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="2" class="no-notif">No notifications found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

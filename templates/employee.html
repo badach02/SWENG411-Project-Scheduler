@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Employee | Schedule System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Employees</h1>
+    <p class="page-subtitle">Manage your team members and their schedules.</p>
+  </div>
+</div>
+
+<section class="card employees-card">
+  <div class="card-header">
+    <h2 class="card-title">Team Members</h2>
+  </div>
+
+  <table class="employees-table">
+  <thead>
+    <tr>
+      <th class="col-employee">Employee</th>
+      <th>Role</th>
+      <th>Email</th>
+      <th>Hours/Week</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for employee in employees %}
+    <tr>
+      <td class="employee-cell">
+        <div class="employee-info">
+          <div class="avatar-circle">{{ employee.initials }}</div>
+          <div class="employee-name">
+            {{ employee.first_name }} {{ employee.last_name }}
+          </div>
+        </div>
+      </td>
+
+      <td>{{ employee.role }}</td>
+      <td>{{ employee.email }}</td>
+      <td>{{ employee.hours_per_week }}h</td>
+
+      <td>
+        {% if employee.is_active %}
+          <span class="status-pill status-active">Active</span>
+        {% else %}
+          <span class="status-pill status-inactive">Inactive</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="5">No employees found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</section>
+{% endblock %}
